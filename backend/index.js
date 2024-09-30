@@ -8,14 +8,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 const port = process.env.PORT || 8080;
-const dbURI =
-  "mongodb+srv://vairamuthu:vairamuthu@cluster0.2qcddvx.mongodb.net//EventTicketManagement";
+const dbURI = process.env.MONGODBURI;
 
 mongoose
-  .connect(dbURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(dbURI)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Error connecting to MongoDB:", err.message));
 

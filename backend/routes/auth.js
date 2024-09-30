@@ -2,13 +2,13 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
-const sendEmail = require("../utils/sendEmail");
+const sendEmail = require("../utils/SendEmail");
 const { registrationEmailTemplate } = require("../utils/templates");
 const router = express.Router();
 require("dotenv").config();
 
 const generateToken = (user) => {
-  return jwt.sign({ id: user._id, role: user.role }, "app_secret", {
+  return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
 };

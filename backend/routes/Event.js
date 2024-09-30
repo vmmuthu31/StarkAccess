@@ -3,7 +3,7 @@ const Event = require("../models/Event");
 const authenticateToken = require("../middleware/authenticateToken");
 const User = require("../models/User");
 const { eventCreationEmailTemplate } = require("../utils/templates");
-const sendEmail = require("../utils/sendEmail");
+const sendEmail = require("../utils/SendEmail");
 const router = express.Router();
 
 const isAdmin = (req, res, next) => {
