@@ -1,6 +1,9 @@
 const express = require("express");
 const Event = require("../models/Event");
 const authenticateToken = require("../middleware/authenticateToken");
+const User = require("../models/User");
+const { eventCreationEmailTemplate } = require("../utils/templates");
+const sendEmail = require("../utils/sendEmail");
 const router = express.Router();
 
 const isAdmin = (req, res, next) => {
@@ -27,6 +30,12 @@ router.post("/create-event", authenticateToken, async (req, res) => {
     });
 
     await event.save();
+
+    const user = await User.findById(req.user.id);
+
+    const subject = "Your Event is Live!";
+    const html = eventCreationEmailTemplate(user.name, name);
+    await sendEmail(user.email, subject, html);
 
     return res
       .status(201)

@@ -2,6 +2,8 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
+const sendEmail = require("../utils/sendEmail");
+const { registrationEmailTemplate } = require("../utils/templates");
 const router = express.Router();
 require("dotenv").config();
 
@@ -25,6 +27,10 @@ router.post("/register", async (req, res) => {
 
     user = new User({ name, email, password: hashedPassword, role });
     await user.save();
+
+    const subject = "Welcome to StarkNet!";
+    const html = registrationEmailTemplate(name);
+    await sendEmail(email, subject, html);
 
     return res.status(201).json({
       message: "User registered successfully",
