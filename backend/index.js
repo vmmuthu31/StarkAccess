@@ -8,7 +8,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 const port = process.env.PORT || 8080;
-const dbURI = process.env.MONGODBURI;
+const dbURI =
+  "mongodb+srv://vairamuthu:vairamuthu@cluster0.2qcddvx.mongodb.net//EventTicketManagement";
 
 mongoose
   .connect(dbURI, {
