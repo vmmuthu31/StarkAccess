@@ -22,7 +22,14 @@ app.use("/api/auth", authRoutes);
 app.use("/api/Events", eventRoutes);
 
 app.get("/", (req, res) => {
-  res.json({ data: "Backend is working fine" });
+  const serverStatus = {
+    status: "Server is running smoothly 🚀",
+    uptime: process.uptime(),
+    timestamp: new Date().toLocaleString(),
+    message: "Welcome to the StarkNet Event Ticketing Platform API 🎉",
+  };
+
+  res.status(200).json(serverStatus);
 });
 
 app.listen(port, () => {
