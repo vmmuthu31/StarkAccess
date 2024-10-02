@@ -4,6 +4,7 @@ const authenticateToken = require("../middleware/authenticateToken");
 const User = require("../models/User");
 const { eventCreationEmailTemplate } = require("../utils/templates");
 const sendEmail = require("../utils/SendEmail");
+const { default: axios } = require("axios");
 const router = express.Router();
 
 const isAdmin = (req, res, next) => {
@@ -108,6 +109,16 @@ router.delete("/event/:id", authenticateToken, isAdmin, async (req, res) => {
     }
 
     await event.deleteOne();
+    const adminAction = {
+      action: "Deleted Event",
+      targetId: event._id,
+      targetType: "event",
+      description: `Event "${event.name}" was deleted by admin.`,
+    };
+
+    await axios.post("http://localhost:8080/api/admin/action", adminAction, {
+      headers: { Authorization: `Bearer ${req.headers['authorization'].split(' ')[1]}` }, // Assuming JWT is used for authentication
+    });
 
     return res.status(200).json({ message: "Event deleted successfully" });
   } catch (err) {

@@ -17,9 +17,13 @@ mongoose
 
 const authRoutes = require("./routes/auth");
 const eventRoutes = require("./routes/Event");
+const UserRoutes = require("./routes/User");
+const AdminRoutes = require("./routes/Admin")
 
 app.use("/api/auth", authRoutes);
 app.use("/api/Events", eventRoutes);
+app.use("/api/user", UserRoutes);
+app.use("/api/admin", AdminRoutes)
 
 app.get("/", (req, res) => {
   const serverStatus = {

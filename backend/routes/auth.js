@@ -14,7 +14,7 @@ const generateToken = (user) => {
 };
 
 router.post("/register", async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role, walletAddress } = req.body;
 
   try {
     let user = await User.findOne({ email });
@@ -25,7 +25,7 @@ router.post("/register", async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    user = new User({ name, email, password: hashedPassword, role });
+    user = new User({ name, email, password: hashedPassword, role, walletAddress });
     await user.save();
 
     const subject = "Welcome to StarkNet!";
@@ -39,6 +39,7 @@ router.post("/register", async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        walletAddress: user.walletAddress
       },
     });
   } catch (err) {

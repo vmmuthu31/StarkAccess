@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     enum: ["user", "organizer", "admin", "superadmin"],
     default: "user",
   },
-  walletAddress: { type: String },
+  walletAddress: { type: String, required:true },
   createdEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Event" }],
   tickets: [{ type: mongoose.Schema.Types.ObjectId, ref: "Ticket" }],
   createdAt: { type: Date, default: Date.now },
