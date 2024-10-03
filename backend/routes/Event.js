@@ -129,6 +129,35 @@ router.delete("/event/:id", authenticateToken, isAdmin, async (req, res) => {
   }
 });
 
+router.put("/update-event/:id", authenticateToken, async (req, res) => {
+  const { name, description, date, location, ticketPrice, maxTickets } = req.body;
+
+  try {
+    let event = await Event.findById(req.params.id);
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    if (event.organizer.toString() !== req.user.id && req.user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied. Not the event organizer." });
+    }
+
+    event.name = name || event.name;
+    event.description = description || event.description;
+    event.date = date || event.date;
+    event.location = location || event.location;
+    event.ticketPrice = ticketPrice || event.ticketPrice;
+    event.maxTickets = maxTickets || event.maxTickets;
+
+    await event.save();
+    return res.status(200).json({ message: "Event updated successfully", event });
+  } catch (err) {
+    return res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+
 
 module.exports = router;
 

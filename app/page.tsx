@@ -1,31 +1,45 @@
 "use client";
-import { useEffect, useState } from "react";
-import { BACKENDURI } from "./constant";
+import { useState, useEffect } from "react";
+import Home from "@/app/Home/page";
+// import Loader from "@/Components/Loader";
+import "@/app/globals.css";
+// import { Analytics } from "@vercel/analytics/react";
 
-export default function Home() {
-  const [getInfo, setGetInfo] = useState<any>([]);
-
-  const getData = async () => {
-    try {
-      const response = await fetch(`${BACKENDURI}`);
-      const result = await response.json();
-      console.log("Result:", result);
-      setGetInfo(result);
-    } catch (error) {
-      console.log("Error occurred while fetching data:", error);
-    }
-  };
+export default function Page() {
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getData();
+    const handleComplete = () => {
+      setTimeout(() => {
+        setLoading(false);
+      }, 0);
+    };
+
+    if (document.readyState === "complete") {
+      handleComplete();
+    } else {
+      window.addEventListener("load", handleComplete);
+      return () => window.removeEventListener("load", handleComplete);
+    }
   }, []);
 
   return (
-    <div>
-      Fetch data from backend
-      <div>
-        {getInfo && getInfo.data && <p>{getInfo.data}</p>}
-      </div>
-    </div>
+    <>
+      {/* <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap"
+          rel="stylesheet"
+        />
+      </head> */}
+      <main className="">
+        {/* <Analytics /> */}
+        {/* {loading && <Loader />} */}
+        <div className={loading ? "blur-sm" : ""}>
+          <Home />
+        </div>
+      </main>
+    </>
   );
 }
