@@ -1,1 +1,3 @@
-export const BACKENDURI = "https://api.starkaccess.xyz";
+export const BACKENDURI = "http://localhost:8000";
+export const DEVURL = "https://api.starkaccess.xyz";
+
