@@ -11,6 +11,9 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        customStart: "#78ABFC",
+        customVia: "#418FF2",
+        customEnd: "#4390F2"
       },
     },
   },
