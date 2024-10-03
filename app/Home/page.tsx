@@ -5,7 +5,7 @@ type Props = {}
 
 const page = (props: Props) => {
   return (
-    <div className=' bg-gradient-to-b from-customStart via-customVia to-customEnd min-h-screen'>
+    <div className=' bg-gradient-to-b from-customStart to-customEnd min-h-screen'>
         <div className="py-6">
         <Header />
         </div>
