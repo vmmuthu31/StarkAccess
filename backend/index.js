@@ -6,7 +6,20 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+const allowedOrigins = ["https://www.starkaccess.xyz", "http://localhost:3000"];
+app.use(
+  cors((req, callback) => {
+  let corsOptions;
+  if (allowedOrigins.includes(req.header("Origin"))) {
+    corsOptions = { origin: true, credentials: true };
+  } else {
+    corsOptions = { origin: false };
+  }
+  callback(null, corsOptions);
+})
+);
+
 const port = process.env.PORT || 8080;
 const dbURI = process.env.MONGODBURI;
 
@@ -18,12 +31,14 @@ mongoose
 const authRoutes = require("./routes/auth");
 const eventRoutes = require("./routes/Event");
 const UserRoutes = require("./routes/User");
-const AdminRoutes = require("./routes/Admin")
+const AdminRoutes = require("./routes/Admin");
+const organizerRoutes = require("./routes/Organizer");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/Events", eventRoutes);
 app.use("/api/user", UserRoutes);
-app.use("/api/admin", AdminRoutes)
+app.use("/api/admin", AdminRoutes);
+app.use("/api/organizer",organizerRoutes);
 
 app.get("/", (req, res) => {
   const serverStatus = {

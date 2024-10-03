@@ -10,6 +10,10 @@ const eventSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  co_organizers:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  }],
   ticketPrice: { type: Number, required: true },
   maxTickets: { type: Number, required: true },
   ticketsSold: { type: Number, default: 0 },
@@ -19,6 +23,15 @@ const eventSchema = new mongoose.Schema({
 
 eventSchema.methods.canUserApply = function (userId) {
   return this.organizer.toString() !== userId.toString();
+};
+
+eventSchema.methods.isCoOrganizer = function (userId) {
+  return this.co_organizers.includes(userId.toString());
+};
+
+// Method to check if a user is the main organizer
+eventSchema.methods.isOrganizer = function (userId) {
+  return this.organizer.toString() === userId.toString();
 };
 
 module.exports = mongoose.model("Event", eventSchema);

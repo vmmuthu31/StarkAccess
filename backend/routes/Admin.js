@@ -7,7 +7,7 @@ const issuperAdmin = (req, res, next) => {
     if (req.user.role === "superadmin") {
         next();
     } else {
-        return res.status(403).json({ message: "Access denied. Admin only." });
+        return res.status(403).json({ message: "Access denied. SuperAdmin only." });
     }
 };
 
@@ -31,8 +31,6 @@ router.post("/action", authenticateToken, isAdmin, async (req, res) => {
             description,
             performedAt: new Date(),
         });
-
-        // Save the admin action
         await adminAction.save();
 
         return res.status(201).json({ message: "Admin action logged successfully", adminAction });
@@ -56,7 +54,7 @@ router.get("/actions", authenticateToken, issuperAdmin, async (req, res) => {
     }
 });
 
-router.delete("/:id", authenticateToken, issuperAdmin, async (req, res) => {
+router.delete("/action/:id", authenticateToken, issuperAdmin, async (req, res) => {
     try {
         const action = await AdminAction.findById(req.params.id);
 
