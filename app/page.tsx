@@ -3,7 +3,11 @@ import { useEffect, useState } from "react";
 import { BACKENDURI } from "./constant";
 
 export default function Home() {
-  const [getInfo, setGetInfo] = useState<any>([]);
+  interface InfoType {
+    data: string;
+  }
+
+  const [getInfo, setGetInfo] = useState<InfoType | null>(null);
 
   const getData = async () => {
     try {
@@ -23,9 +27,7 @@ export default function Home() {
   return (
     <div>
       Fetch data from backend
-      <div>
-        {getInfo && getInfo.data && <p>{getInfo.data}</p>}
-      </div>
+      <div>{getInfo && getInfo.data && <p>{getInfo.data}</p>}</div>
     </div>
   );
 }
