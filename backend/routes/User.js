@@ -2,6 +2,7 @@ const express = require("express");
 const authenticateToken = require("../middleware/authenticateToken");
 const User = require("../models/User");
 const { default: axios } = require("axios");
+const { URL } = require("../constants");
 const router = express.Router();
 
 // Middleware to check if the user is admin or superadmin
@@ -56,7 +57,7 @@ router.delete("/:id", authenticateToken, isAdmin, async (req, res) => {
       description: `User "${user.name}" was deleted by admin.`,
     };
 
-    await axios.post("http://localhost:8080/api/admin/action", adminAction, {
+    await axios.post(`${URL}/api/admin/action`, adminAction, {
       headers: { Authorization: `Bearer ${req.headers['authorization'].split(' ')[1]}` }, // Assuming JWT is used for authentication
     });
 
