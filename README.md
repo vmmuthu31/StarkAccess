@@ -64,11 +64,6 @@ The platform leverages the power of Starknet's Layer 2 scaling and zkSNARKs for 
     npm run build
     ```
 
-5. Start the production server:
-
-    ```bash
-    npm start
-    ```
 
 ### Backend (Node.js)
 
@@ -87,11 +82,10 @@ The platform leverages the power of Starknet's Layer 2 scaling and zkSNARKs for 
     npm run dev
     ```
 
-4. For production, build and start the server:
+4. Build the server for production:
 
     ```bash
     npm run build
-    npm start
     ```
 
 ## 🧑‍💻 Todos
