@@ -6,7 +6,20 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+const allowedOrigins = ["https://www.starkaccess.xyz", "http://localhost:3000"];
+app.use(
+  cors((req, callback) => {
+  let corsOptions;
+  if (allowedOrigins.includes(req.header("Origin"))) {
+    corsOptions = { origin: true, credentials: true };
+  } else {
+    corsOptions = { origin: false };
+  }
+  callback(null, corsOptions);
+})
+);
+
 const port = process.env.PORT || 8080;
 const dbURI = process.env.MONGODBURI;
 
