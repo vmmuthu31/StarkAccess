@@ -1,9 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
-import Home from "@/app/Home/page";
 // import Loader from "@/Components/Loader";
 import "@/app/globals.css";
+import dynamic from "next/dynamic";
 // import { Analytics } from "@vercel/analytics/react";
+
+const Home = dynamic(() => import("@/app/Home/page"), {
+  ssr: false,
+});
 
 export default function Page() {
   const [loading, setLoading] = useState(true);

@@ -2,7 +2,14 @@ import React from "react";
 import Header from "../components/Header";
 import Assets from "../components/Assets/Assets";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
+
+const MotionButton = dynamic(
+  () => import("framer-motion").then((mod) => mod.motion.button),
+  {
+    ssr: false,
+  }
+);
 
 type Props = {};
 
@@ -44,7 +51,7 @@ const page = (props: Props) => {
             </h1>
 
             <div className="flex relative justify-center gap-4">
-              <motion.button
+              <MotionButton
                 whileTap={{ scale: 0.9 }}
                 className=" text-[#3581F1] gap-1 bg-white p-2 px-3 flex items-center border-4 border-[#78ABFC] rounded-[10px]"
               >
@@ -54,8 +61,8 @@ const page = (props: Props) => {
                   src={Assets.ArrowRightBlue}
                   alt="ArrowRight"
                 ></Image>{" "}
-              </motion.button>
-              <motion.button
+              </MotionButton>
+              <MotionButton
                 whileTap={{ scale: 0.9 }}
                 className="p-2 px-3 gap-1 flex items-center border-2 border-white rounded-[10px]"
               >
@@ -65,14 +72,22 @@ const page = (props: Props) => {
                   src={Assets.ArrowRightWhite}
                   alt="ArrowRight"
                 ></Image>{" "}
-              </motion.button>
+              </MotionButton>
             </div>
-          </div>  
+          </div>
         </div>
-        
+
         <div className="">
-          <Image className=" w-1/3" src={Assets.DottedArrowToRight} alt="DottedArrowToRight"></Image>
-          <Image className=" w-1/3 absolute right-0 top-[200px]" src={Assets.DottedArrowToLeft} alt="DottedArrowToLeft"></Image>
+          <Image
+            className=" w-1/3"
+            src={Assets.DottedArrowToRight}
+            alt="DottedArrowToRight"
+          ></Image>
+          <Image
+            className=" w-1/3 absolute right-0 top-[200px]"
+            src={Assets.DottedArrowToLeft}
+            alt="DottedArrowToLeft"
+          ></Image>
         </div>
       </div>
     </div>
