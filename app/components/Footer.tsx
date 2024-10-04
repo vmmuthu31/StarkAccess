@@ -10,7 +10,7 @@ const Footer = (props: Props) => {
         <div className=" border-t-2 border-[#4390F2] w-full">
             <div className=" p-2 flex justify-between items-center">
                 <p className=' bricolage-font text-[#4390F2] font-semibold text-xl hover:cursor-pointer'>StarkAccess</p>
-                <div className=" text-[#7CB6FF] flex items-center gap-5">
+                <div className=" text-[#7CB6FF] flex items-center gap-5 text-sm">
                   <p className=' flex items-center gap-1 hover:cursor-pointer'> <Image className=' h-6 w-auto' src={Assets.Explore} alt="Explore event"/> Explore Events</p>
                   <p className=' flex items-center gap-1 hover:cursor-pointer'> <Image className=' h-6 w-auto' src={Assets.Create} alt="Create event"/> Create Event</p>
                   <p className=' flex items-center gap-1 hover:cursor-pointer'> <Image className=' h-6 w-auto' src={Assets.Manage} alt="Manage tickets"/> Manage Tickets</p>
