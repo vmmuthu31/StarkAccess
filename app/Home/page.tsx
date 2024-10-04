@@ -5,6 +5,8 @@ import Assets from "../components/Assets/Assets";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Explore from "./components/Explore";
+import Footer from "../components/Footer";
+import TwoCards from "./components/TwoCards";
 
 type Props = {};
 
@@ -81,14 +83,14 @@ const page = (props: Props) => {
                 alt="DottedArrowToRight"
               ></Image>
               <Image
-                className="w-1/3 absolute right-0 top-[-200px]"
+                className="w-1/3 absolute right-0 top-[-180px]"
                 src={Assets.DottedArrowToLeft}
                 alt="DottedArrowToLeft"
               ></Image>
             </div>
           </div>
-          <div className="flex justify-center">
-            <div className="relative bg-[#EDF3FD] h-[250px] w-[250px] rounded-[20px] shadow-xl transform rotate-[-8deg]">
+          {/* <div className="flex justify-center">
+            <div className="relative bg-[#EDF3FD] h-[300px] w-[300px] rounded-[20px] shadow-xl transform rotate-[-8deg]">
               <Image
                 className="absolute top-[-40px] left-[-40px] h-14 w-auto z-20" // Ensure higher z-index and adjust positioning
                 src={Assets.Decor1}
@@ -97,7 +99,7 @@ const page = (props: Props) => {
               <div className=" h-full w-full rounded-[20px] z-10"></div>
             </div>
 
-            <div className="relative bg-[#EDF3FD] h-[250px] w-[250px] rounded-[20px] shadow-xl mt-10 transform rotate-[8deg]">
+            <div className="relative bg-[#EDF3FD] h-[300px] w-[300px] rounded-[20px] shadow-xl mt-10 transform rotate-[8deg]">
               <Image
                 className="absolute top-[-40px] right-[-40px] h-14 w-auto z-20" // Ensure higher z-index and adjust positioning
                 src={Assets.Decor2}
@@ -105,12 +107,14 @@ const page = (props: Props) => {
               />
               <div className=" h-full w-full rounded-[20px] z-10"></div>
             </div>
-          </div>
+          </div> */}
+          <TwoCards />
         </div>
 
         <div className="pt-10">
           <Explore />
         </div>
+        <Footer />
       </div>
     </div>
   );

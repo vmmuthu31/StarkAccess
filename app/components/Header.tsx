@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import Assets from "@/app/components/Assets/Assets";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 type Props = {};
 
 const Header = (props: Props) => {
+  
   const [isOpen, setIsOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string>("");
 
@@ -20,13 +22,16 @@ const Header = (props: Props) => {
   };
 
   return (
+    <div className="w-full z-50 overflow-x-hidden">
     <div className="max-w-7xl mx-auto">
       {/* Desktop Menu */}
       <div className="hidden lg:flex items-center justify-between">
-        <div>
-          <Image src={Assets.Logo} alt="Logo" width={200} height={100} />
-        </div>
+        <Link href="/Home" className=" flex items-center gap-1">
+          <Image className=" h-10 w-auto" src={Assets.Logo1} alt="Logo" />
+          <p className=" text-3xl font-semibold bricolage-font">StarkAccess</p>
+        </Link>
         <div className="flex items-center gap-[30px] text-xl">
+          <Link href="/Home">
           <h1
             className={`cursor-pointer ${
               activeMenu === "home"
@@ -37,6 +42,7 @@ const Header = (props: Props) => {
           >
             Home
           </h1>
+          </Link>
           <h1
             className={`cursor-pointer ${
               activeMenu === "explore"
@@ -57,9 +63,10 @@ const Header = (props: Props) => {
           >
             Create Events
           </h1>
+          <Link href="/Onboarding">
           <motion.button
             whileTap={{ scale: 0.9 }}
-            className="flex items-center bg-[#4F7CBB] p-1 px-4 rounded-full"
+            className="flex items-center bg-[#4F7CBB] p-1 px-4 rounded-full text-white"
           >
             Sign In
             <Image
@@ -68,6 +75,7 @@ const Header = (props: Props) => {
               className="h-6 w-6"
             />
           </motion.button>
+          </Link>
         </div>
       </div>
 
@@ -170,6 +178,7 @@ const Header = (props: Props) => {
             />
           </motion.button>
         </div>
+      </div>
       </div>
     </div>
   );
