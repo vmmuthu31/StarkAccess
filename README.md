@@ -1,4 +1,4 @@
-# StarkTicket
+# StarkTicket 🎫
 
 ![starkticket](https://github.com/user-attachments/assets/a851fc19-b22e-4fe5-8631-3bde7a84a978)
 
