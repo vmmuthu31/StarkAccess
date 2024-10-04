@@ -1,9 +1,10 @@
-# StarkTicket 🎫
+# StarkAccess 🎫
 
-![starkticket](https://github.com/user-attachments/assets/a851fc19-b22e-4fe5-8631-3bde7a84a978)
+![image](https://github.com/user-attachments/assets/23aa806d-42d0-4944-948a-87d5a372f0fd)
 
 
-StarkTicket is a decentralized event management and ticketing platform powered by Starknet and zkSNARKs. It allows users to purchase event tickets as NFTs on-chain, ensuring privacy, security, and transparency. Organizers can create events, add co-organizers, and manage ticket sales, while maintaining a high level of privacy for all participants through zero-knowledge proofs.
+
+StarkAccess is a decentralized event management and ticketing platform powered by Starknet and zkSNARKs. It allows users to purchase event tickets as NFTs on-chain, ensuring privacy, security, and transparency. Organizers can create events, add co-organizers, and manage ticket sales, while maintaining a high level of privacy for all participants through zero-knowledge proofs.
 
 ## Key Features
 
