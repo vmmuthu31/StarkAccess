@@ -1,12 +1,11 @@
 import React from "react";
 import Image from "next/image";
-import Assets from "@/app/components/Assets/Assets"; // Import Assets
-import ExploreEventsData from "@/app/utils/ExploreEvents.json"; // Import JSON data
+import Assets from "@/app/components/Assets/Assets"; 
+import ExploreEventsData from "@/app/utils/ExploreEvents.json"; 
 
 type Props = {};
 
 const TwoCards = (props: Props) => {
-  // Extract the first two events from the JSON data
   const [event1, event2] = ExploreEventsData.slice(0, 2);
 
   return (
