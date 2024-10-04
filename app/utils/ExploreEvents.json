@@ -1,0 +1,33 @@
+[
+    {
+      "id": 1,
+      "title": "DAO Governance & Tokenomics Workshop",
+      "description": "A two-day summit featuring leaders and pioneers in decentralized finance, NFTs, and blockchain technology.",
+      "date": "November 12-13, 2024",
+      "time": "9:00 AM - 6:00 PM",
+      "location": "San Francisco, CA",
+      "image": "Event1",
+      "logo": "StarknetLogo"
+    },
+    {
+      "id": 2,
+      "title": "Polygon Hacker House Bangkok",
+      "description": "Join the leading minds in the virtual world and blockchain space for this three-day event.",
+      "date": "December 5-7, 2024",
+      "time": "10:00 AM - 5:00 PM",
+      "location": "New York, NY",
+      "image": "Event2",
+      "logo": "PolygonLogo"
+    },
+    {
+      "id": 3,
+      "title": "Polygon Hacker House Bangkok",
+      "description": "A summit focused on the latest in blockchain security and cryptographic advancements.",
+      "date": "January 15-16, 2025",
+      "time": "8:00 AM - 4:00 PM",
+      "location": "London, UK",
+      "image": "Event3",
+      "logo": "TPGLogo"
+    }
+  ]
+  
