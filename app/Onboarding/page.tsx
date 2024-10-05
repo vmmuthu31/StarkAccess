@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 
 type Props = {};
 
-const page = (props: Props) => {
+const Page = (props: Props) => {
   return (
     <div className=" bg-[url('/BgImg2.webp')] bg-cover bg-center min-h-screen text-black MediumDisp">
       <div className="py-3 md:py-6">
@@ -67,7 +67,11 @@ const page = (props: Props) => {
               whileTap={{ scale: 0.9 }}
               className="text-black/60 bg-[#F4F9FF] w-full p-3 flex justify-center items-center gap-2 custom-shadow BookHead border border-white/10 rounded-[10px]"
             >
-              <Image className=" h-6 w-auto " src={Assets.Google} alt="Google"></Image>
+              <Image
+                className=" h-6 w-auto "
+                src={Assets.Google}
+                alt="Google"
+              ></Image>
               Sign in with Google
             </motion.h1>
           </div>
@@ -77,4 +81,4 @@ const page = (props: Props) => {
   );
 };
 
-export default page;
+export default Page;
