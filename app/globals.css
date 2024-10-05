@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Epilogue:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap');
 
 :root {
   --background: #ffffff;
@@ -40,6 +41,10 @@ body {
   src: url('/fonts/SequelSansBoldHead.otf') format('opentype');
 }
 
+.bricolage-font {
+  font-family: "Bricolage Grotesque";
+}
+
 p, button {
   font-family: 'SequelSansMediumDisp', sans-serif;
 }
@@ -58,6 +63,15 @@ button {
 }
 
 button:hover {
-  opacity: 0.8; /* Reduced opacity on hover */
+  opacity: 0.6; /* Reduced opacity on hover */
 }
 
+.bgImg{
+    background-size: full;
+}
+
+
+.custom-shadow {
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1),
+              0px -4px 10px rgba(0, 0, 0, 0.1);
+}

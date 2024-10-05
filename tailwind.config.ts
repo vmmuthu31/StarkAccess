@@ -14,6 +14,12 @@ const config: Config = {
         customStart: "#81AFF5",
         customEnd: "#378AF2"
       },
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        'custom-bg': "url('/app/Assets/BgImg.webp')",
+      },
     },
   },
   plugins: [],
