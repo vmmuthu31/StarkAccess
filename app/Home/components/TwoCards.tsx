@@ -23,7 +23,7 @@ const TwoCards = (props: Props) => {
               src={Assets[event1.logo]} // Map the logo dynamically
               alt={event1.title}
             />
-            <p className=" text-xl ">{event1.title}</p>
+            <p className=" text-xl h-14 overflow-hidden text-ellipsis line-clamp-2">{event1.title}</p>
             <h1 className=" text-sm">{event1.description}</h1>
             <div className="text-sm space-y-1">
               <h1 className=" flex items-center gap-1">
@@ -57,8 +57,8 @@ const TwoCards = (props: Props) => {
               src={Assets[event2.logo]} // Map the logo dynamically
               alt={event2.title}
             />
-            <p className=" text-xl ">{event2.title}</p>
-            <h1 className=" text-sm">{event2.description}</h1>
+            <p className=" text-xl h-14 overflow-hidden text-ellipsis line-clamp-2">{event2.title}</p>
+            <h1 className=" text-sm h-16 overflow-hidden text-ellipsis line-clamp-3">{event2.description}</h1>
             <div className="text-sm space-y-1">
               <h1 className=" flex items-center gap-1">
                 {" "}

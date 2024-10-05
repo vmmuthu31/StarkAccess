@@ -10,25 +10,25 @@ type EventCardProps = {
     time: string;
     location: string;
     image: keyof typeof Assets; // Ensure the image key is valid
-    logo: keyof typeof Assets;  // Ensure the logo key is valid
+    logo: keyof typeof Assets; // Ensure the logo key is valid
   };
 };
 
 const EventCard = ({ event }: EventCardProps) => {
   return (
-    <div className="bg-[#EDF3FD] rounded-[10px] h-fit w-[310px] custom-shadow mx-auto p-4 space-y-2">
+    <div className="bg-[#EDF3FD] rounded-[10px] h-[585px] w-[310px] custom-shadow mx-auto p-4 space-y-2">
       <div className="h-[280px] w-[280px] relative ">
         {/* Check if Assets for the given key exists before rendering */}
         <div className="overflow-hidden">
-        {Assets[event.image] && (
-          <Image
-            className="h-full w-full transition-transform duration-500 hover:scale-110"
-            src={Assets[event.image]} 
-            alt={event.title}
-            width={280}
-            height={280}  // Explicitly define width/height for Next.js Image
-          />
-        )}
+          {Assets[event.image] && (
+            <Image
+              className="h-full w-full transition-transform duration-500 hover:scale-110"
+              src={Assets[event.image]}
+              alt={event.title}
+              width={280}
+              height={280} // Explicitly define width/height for Next.js Image
+            />
+          )}
         </div>
         {Assets[event.logo] && (
           <Image
@@ -36,28 +36,48 @@ const EventCard = ({ event }: EventCardProps) => {
             src={Assets[event.logo]}
             alt="Event Logo"
             width={56}
-            height={56}  // Explicitly define width/height for Next.js Image
+            height={56} // Explicitly define width/height for Next.js Image
           />
         )}
       </div>
-      <p className="text-xl">{event.title}</p>
-      <h1 className="text-sm">{event.description}</h1>
-      <div className="text-sm space-y-1">
+      <p className="text-xl h-14 overflow-hidden text-ellipsis line-clamp-2">
+        {event.title}
+      </p>
+      <h1 className="text-sm h-16 overflow-hidden text-ellipsis line-clamp-3">{event.description}</h1>
+      <div className="text-sm space-y-1 h-[74px]">
         <h1 className="flex items-center gap-1">
           {Assets.Calendar && (
-            <Image className="h-5 w-auto" src={Assets.Calendar} alt="Calendar" width={20} height={20} />
+            <Image
+              className="h-5 w-auto"
+              src={Assets.Calendar}
+              alt="Calendar"
+              width={20}
+              height={20}
+            />
           )}
            {event.date}
         </h1>
         <h1 className="flex items-center gap-1">
           {Assets.Time && (
-            <Image className="h-5 w-auto" src={Assets.Time} alt="Time" width={20} height={20} />
+            <Image
+              className="h-5 w-auto"
+              src={Assets.Time}
+              alt="Time"
+              width={20}
+              height={20}
+            />
           )}
            {event.time}
         </h1>
         <h1 className="flex items-center gap-1">
           {Assets.Location && (
-            <Image className="h-5 w-auto" src={Assets.Location} alt="Location" width={20} height={20} />
+            <Image
+              className="h-5 w-auto"
+              src={Assets.Location}
+              alt="Location"
+              width={20}
+              height={20}
+            />
           )}
            {event.location}
         </h1>
