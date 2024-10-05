@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import Assets from "@/app/components/Assets/Assets"; 
-import ExploreEventsData from "@/app/utils/ExploreEvents.json"; 
+import Assets from "@/app/components/Assets/Assets";
+import ExploreEventsData from "@/app/utils/ExploreEvents.json";
 
 type Props = {};
 
@@ -20,7 +20,7 @@ const TwoCards = (props: Props) => {
           <div className=" h-full w-full rounded-[20px] z-10 p-3 space-y-2">
             <Image
               className=" h-[52px] w-auto"
-              src={Assets[event1.logo]} // Map the logo dynamically
+              src={Assets[event1.logo]}
               alt={event1.title}
             />
             <p className=" text-xl ">{event1.title}</p>
@@ -28,17 +28,25 @@ const TwoCards = (props: Props) => {
             <div className="text-sm space-y-1">
               <h1 className=" flex items-center gap-1">
                 {" "}
-                <Image className=" h-5 w-auto" src={Assets.Calendar} alt="Calendar" />{" "}
+                <Image
+                  className=" h-5 w-auto"
+                  src={Assets.Calendar}
+                  alt="Calendar"
+                />{" "}
                  {event1.date}
               </h1>
               <h1 className=" flex items-center gap-1">
                 {" "}
-                <Image className=" h-5 w-auto" src={Assets.Time} alt="Time" />{" "}
-                 {event1.time}
+                <Image className=" h-5 w-auto" src={Assets.Time} alt="Time" />  
+                {event1.time}
               </h1>
               <h1 className=" flex items-center gap-1">
                 {" "}
-                <Image className=" h-5 w-auto" src={Assets.Location} alt="Location" />{" "}
+                <Image
+                  className=" h-5 w-auto"
+                  src={Assets.Location}
+                  alt="Location"
+                />{" "}
                  {event1.location}
               </h1>
             </div>
@@ -54,7 +62,7 @@ const TwoCards = (props: Props) => {
           <div className=" h-full w-full rounded-[20px] z-10 p-3 space-y-2">
             <Image
               className=" h-[52px] w-auto"
-              src={Assets[event2.logo]} // Map the logo dynamically
+              src={Assets[event2.logo]}
               alt={event2.title}
             />
             <p className=" text-xl ">{event2.title}</p>
@@ -62,17 +70,25 @@ const TwoCards = (props: Props) => {
             <div className="text-sm space-y-1">
               <h1 className=" flex items-center gap-1">
                 {" "}
-                <Image className=" h-5 w-auto" src={Assets.Calendar} alt="Calendar" />{" "}
+                <Image
+                  className=" h-5 w-auto"
+                  src={Assets.Calendar}
+                  alt="Calendar"
+                />{" "}
                  {event2.date}
               </h1>
               <h1 className=" flex items-center gap-1">
                 {" "}
-                <Image className=" h-5 w-auto" src={Assets.Time} alt="Time" />{" "}
-                 {event2.time}
+                <Image className=" h-5 w-auto" src={Assets.Time} alt="Time" />  
+                {event2.time}
               </h1>
               <h1 className=" flex items-center gap-1">
                 {" "}
-                <Image className=" h-5 w-auto" src={Assets.Location} alt="Location" />{" "}
+                <Image
+                  className=" h-5 w-auto"
+                  src={Assets.Location}
+                  alt="Location"
+                />{" "}
                  {event2.location}
               </h1>
             </div>
