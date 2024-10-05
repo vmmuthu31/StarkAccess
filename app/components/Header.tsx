@@ -22,63 +22,65 @@ const Header = (props: Props) => {
 
   return (
     <div className="w-full z-50 overflow-x-hidden">
-      <div className="max-w-7xl mx-auto">
-        {/* Desktop Menu */}
-        <div className="hidden lg:flex items-center justify-between">
-          <Link href="/Home" className=" flex items-center gap-1">
-            <Image className=" h-10 w-auto" src={Assets.Logo1} alt="Logo" />
-            <p className=" text-3xl font-semibold bricolage-font">
-              StarkAccess
-            </p>
+    <div className="max-w-7xl mx-auto">
+      {/* Desktop Menu */}
+      <div className="hidden lg:flex items-center justify-between">
+        <Link href="/Home" className=" flex items-center gap-1">
+          <Image className=" h-10 w-auto" src={Assets.Logo1} alt="Logo" />
+          <p className=" text-3xl font-semibold bricolage-font">StarkAccess</p>
+        </Link>
+        <div className="flex items-center gap-[30px] text-xl">
+          <Link href="/Home">
+          <h1
+            className={`cursor-pointer ${
+              activeMenu === "home"
+                ? "scale-110 transform transition-transform duration-300 border-b-2 border-[#4390F2]"
+                : "hover:text-white/50"
+            }`}
+            onClick={() => handleMenuClick("home")}
+          >
+            Home
+          </h1>
           </Link>
-          <div className="flex items-center gap-[30px] text-xl">
-            <Link href="/Home">
-              <h1
-                className={`cursor-pointer ${
-                  activeMenu === "home"
-                    ? "scale-110 transform transition-transform duration-300"
-                    : "hover:text-white/50"
-                }`}
-                onClick={() => handleMenuClick("home")}
-              >
-                Home
-              </h1>
-            </Link>
-            <h1
-              className={`cursor-pointer ${
-                activeMenu === "explore"
-                  ? "scale-110 transform transition-transform duration-300"
-                  : "hover:text-white/50"
-              }`}
-              onClick={() => handleMenuClick("explore")}
-            >
-              Explore Events
-            </h1>
-            <h1
-              className={`cursor-pointer ${
-                activeMenu === "create"
-                  ? "scale-110 transform transition-transform duration-300"
-                  : "hover:text-white/50"
-              }`}
-              onClick={() => handleMenuClick("create")}
-            >
-              Create Events
-            </h1>
-            <Link href="#">
-              <motion.button
-                whileTap={{ scale: 0.9 }}
-                className="flex items-center bg-[#4F7CBB] p-1 px-4 rounded-full text-white"
-              >
-                Sign In
-                <Image
-                  src={Assets.ArrowTopRight}
-                  alt="ArrowTopRight"
-                  className="h-6 w-6"
-                />
-              </motion.button>
-            </Link>
-          </div>
+          <Link href="/ExploreEvents">
+          <h1
+            className={`cursor-pointer ${
+              activeMenu === "explore"
+                ? "scale-110 transform transition-transform duration-300 border-b-2 border-[#4390F2]"
+                : "hover:text-white/50"
+            }`}
+            onClick={() => handleMenuClick("explore")}
+          >
+            Explore Events
+          </h1>
+          </Link>
+          <Link href="/CreateEvent">
+          <h1
+            className={`cursor-pointer ${
+              activeMenu === "create"
+                ? "scale-110 transform transition-transform duration-300 border-b-2 border-[#4390F2]"
+                : "hover:text-white/50"
+            }`}
+            onClick={() => handleMenuClick("create")}
+          >
+            Create Events
+          </h1>
+          </Link>
+          <Link href="/Onboarding">
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            className="flex items-center bg-[#4F7CBB] p-1 px-4 rounded-full text-white"
+          >
+            Sign In
+            <Image
+              src={Assets.ArrowTopRight}
+              alt="ArrowTopRight"
+              className="h-6 w-6"
+            />
+          </motion.button>
+          </Link>
         </div>
+      </div>
 
         {/* Mobile Hamburger Icon */}
         <div className="lg:hidden flex justify-between mx-4">

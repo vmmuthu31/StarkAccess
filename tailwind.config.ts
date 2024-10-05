@@ -19,6 +19,8 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
         'custom-bg': "url('/app/Assets/BgImg.webp')",
+        'custom-bg2': "url('/app/Assets/BgImg2.webp')",
+        'custom-bg3': "url('/app/Assets/BgImg3.webp')"
       },
     },
   },
