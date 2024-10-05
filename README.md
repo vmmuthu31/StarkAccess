@@ -1,6 +1,6 @@
 # StarkAccess 🎫
 
-![image](https://github.com/user-attachments/assets/23aa806d-42d0-4944-948a-87d5a372f0fd)
+![Frame 1321314818](https://github.com/user-attachments/assets/ea06274f-b42d-40a3-a98c-1fa64b52a444)
 
 
 
