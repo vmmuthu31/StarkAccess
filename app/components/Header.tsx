@@ -35,7 +35,7 @@ const Header = (props: Props) => {
           <h1
             className={`cursor-pointer ${
               activeMenu === "home"
-                ? "scale-110 transform transition-transform duration-300"
+                ? "scale-110 transform transition-transform duration-300 border-b-2 border-[#4390F2]"
                 : "hover:text-white/50"
             }`}
             onClick={() => handleMenuClick("home")}
@@ -43,26 +43,30 @@ const Header = (props: Props) => {
             Home
           </h1>
           </Link>
+          <Link href="/ExploreEvents">
           <h1
             className={`cursor-pointer ${
               activeMenu === "explore"
-                ? "scale-110 transform transition-transform duration-300"
+                ? "scale-110 transform transition-transform duration-300 border-b-2 border-[#4390F2]"
                 : "hover:text-white/50"
             }`}
             onClick={() => handleMenuClick("explore")}
           >
             Explore Events
           </h1>
+          </Link>
+          <Link href="/CreateEvent">
           <h1
             className={`cursor-pointer ${
               activeMenu === "create"
-                ? "scale-110 transform transition-transform duration-300"
+                ? "scale-110 transform transition-transform duration-300 border-b-2 border-[#4390F2]"
                 : "hover:text-white/50"
             }`}
             onClick={() => handleMenuClick("create")}
           >
             Create Events
           </h1>
+          </Link>
           <Link href="/Onboarding">
           <motion.button
             whileTap={{ scale: 0.9 }}
