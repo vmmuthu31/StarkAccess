@@ -3,7 +3,7 @@ import Header from "../components/Header";
 
 type Props = {};
 
-const page = (props: Props) => {
+const Page = (props: Props) => {
   return (
     <div className="text-black BookHead">
       <div className="bg-[url('/BgImg3.webp')] bg-cover bg-center min-h-screen">
@@ -76,9 +76,7 @@ const page = (props: Props) => {
                   </div>
                   <div className="space-y-1">
                     <p className=" text-lg">Event data & time</p>
-                    <div className="bg-[#DAE7FC] w-full h-[109px] p-2 px-4 rounded-[10px] border border-[#4390F2]/40">
-
-                    </div>
+                    <div className="bg-[#DAE7FC] w-full h-[109px] p-2 px-4 rounded-[10px] border border-[#4390F2]/40"></div>
                   </div>
                 </div>
               </div>
@@ -90,4 +88,4 @@ const page = (props: Props) => {
   );
 };
 
-export default page;
+export default Page;

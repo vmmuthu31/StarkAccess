@@ -7,12 +7,6 @@ import { motion } from "framer-motion";
 import Explore from "./components/Explore";
 import Footer from "../components/Footer";
 import TwoCards from "./components/TwoCards";
-import dynamic from "next/dynamic";
-
-const MotionButton = dynamic(
-  () => import("framer-motion").then((mod) => mod.motion.button),
-  { ssr: false }
-);
 
 const Page = () => {
   return (
