@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect } from "react";
 import EventCard from "./EventCard";
 import ExploreEventsData from "@/app/utils/ExploreEvents.json";
