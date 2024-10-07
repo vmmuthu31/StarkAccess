@@ -11,7 +11,7 @@ const TwoCards = (props: Props) => {
   return (
     <div>
       <div className="md:flex justify-center text-black mt-10 md:mt-0">
-        <div className="relative bg-[#EDF3FD] h-[220px] md:h-[290px] w-[220px] md:w-[290px] rounded-[20px] shadow-xl transform rotate-[-8deg] hover:scale-105 transition-transform duration-500 ml-10 md:ml-0">
+        <div className="relative bg-[#EDF3FD] h-fit w-[220px] md:w-[290px] rounded-[20px] shadow-xl transform rotate-[-8deg] hover:scale-105 transition-transform duration-500 ml-10 md:ml-0">
           <Image
             className="absolute top-[-20px] md:top-[-40px] left-[-20px] md:left-[-40px] h-7 md:h-14 w-auto z-20"
             src={Assets.Decor1}
@@ -53,7 +53,7 @@ const TwoCards = (props: Props) => {
           </div>
         </div>
 
-        <div className="relative bg-[#EDF3FD] h-[220px] md:h-[290px] w-[220px] md:w-[290px] rounded-[20px] custom-shadow mt-[-10px] md:mt-10 transform rotate-[8deg] hover:scale-105 transition-transform duration-500 ml-auto mr-10 md:mr-0 md:ml-0">
+        <div className="relative bg-[#EDF3FD] h-fit w-[220px] md:w-[290px] rounded-[20px] custom-shadow md:mt-10 transform rotate-[8deg] hover:scale-105 transition-transform duration-500 ml-auto mr-10 md:mr-0 md:ml-0">
           <Image
             className="absolute top-[-20px] md:top-[-40px] right-[-20px] md:right-[-40px] h-7 md:h-14 w-auto z-20"
             src={Assets.Decor2}
