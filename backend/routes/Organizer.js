@@ -4,7 +4,6 @@ const Event = require("../models/Event");
 const User = require("../models/User");
 const router = express.Router();
 
-// Middleware to check if user is the main organizer
 const isOrganizer = async (req, res, next) => {
   const event = await Event.findById(req.params.eventId);
   if (!event) {
@@ -37,14 +36,12 @@ router.post("/event/:eventId/add-co-organizer", authenticateToken, isOrganizer, 
   try {
     const { coOrganizerEmail } = req.body;
 
-    // Find the user by their email
     const user = await User.findOne({ email: coOrganizerEmail });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Add co-organizer if not already added
     if (!req.event.co_organizers.includes(user._id)) {
       req.event.co_organizers.push(user._id);
       await req.event.save();
@@ -58,7 +55,6 @@ router.post("/event/:eventId/add-co-organizer", authenticateToken, isOrganizer, 
   }
 });
 
-// Route to remove a co-organizer by email
 router.post("/event/:eventId/remove-co-organizer", authenticateToken, isOrganizer, async (req, res) => {
   try {
     const { coOrganizerEmail } = req.body;
@@ -70,7 +66,6 @@ router.post("/event/:eventId/remove-co-organizer", authenticateToken, isOrganize
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Remove co-organizer if they exist in the array
     req.event.co_organizers = req.event.co_organizers.filter(
       (coOrganizer) => coOrganizer.toString() !== user._id.toString()
     );
@@ -83,7 +78,6 @@ router.post("/event/:eventId/remove-co-organizer", authenticateToken, isOrganize
   }
 });
 
-// Route to update event details (organizer or co-organizer can update)
 router.put("/event/:eventId/update", authenticateToken, isOrganizerOrCoOrganizer, async (req, res) => {
   try {
     const { name, location, date, maxTickets, ticketPrice } = req.body;

@@ -1,6 +1,7 @@
 const express = require("express");
 const authenticateToken = require("../middleware/authenticateToken");
 const AdminAction = require("../models/AdminAction"); // Assuming AdminAction model exists
+const User = require("../models/User");
 const router = express.Router();
 
 const issuperAdmin = (req, res, next) => {
@@ -69,6 +70,76 @@ router.delete("/action/:id", authenticateToken, issuperAdmin, async (req, res) =
         return res
             .status(500)
             .json({ message: "Server error", error: err.message });
+    }
+});
+
+router.put("/promote", authenticateToken, issuperAdmin, async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (user.role === "admin") {
+            return res.status(400).json({ message: "User is already an admin" });
+        }
+
+        // Promote user to admin
+        user.role = "admin";
+        await user.save();
+
+        // Log the promotion action
+        const adminAction = new AdminAction({
+            admin: req.user.id,
+            action: "Promoted User to Admin",
+            targetId: user._id,
+            targetType: "user",
+            description: `User "${user.name}" was promoted to admin by superadmin "${req.user.name}".`,
+            performedAt: new Date(),
+        });
+        await adminAction.save();
+
+        return res.status(200).json({ message: `User "${user.name}" has been promoted to admin`, user });
+    } catch (err) {
+        return res.status(500).json({ message: "Server error", error: err.message });
+    }
+});
+
+router.put("/demote", authenticateToken, issuperAdmin, async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (user.role !== "admin") {
+            return res.status(400).json({ message: "User is not an admin" });
+        }
+
+        // Demote user to regular user
+        user.role = "user";
+        await user.save();
+
+        // Log the demotion action
+        const adminAction = new AdminAction({
+            admin: req.user.id,
+            action: "Demoted User to Regular User",
+            targetId: user._id,
+            targetType: "user",
+            description: `User "${user.name}" was demoted to regular user by superadmin "${req.user.name}".`,
+            performedAt: new Date(),
+        });
+        await adminAction.save();
+
+        return res.status(200).json({ message: `User "${user.name}" has been demoted to regular user`, user });
+    } catch (err) {
+        return res.status(500).json({ message: "Server error", error: err.message });
     }
 });
 
