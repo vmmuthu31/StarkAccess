@@ -106,6 +106,7 @@ const DateTime = (props: Props) => {
           <div className="bg-[#DAE7FC] w-full h-[109px] p-2 px-4 rounded-[10px] border border-[#4390F2]/40 flex items-center">
                   <div className="">
                     {/* Start Date and Time */}
+                    
                     <div className=" flex items-center">
                       <div className=" flex items-center gap-2 w-[60px]">
                         <Image src={Assets.DotSolid} alt="Dot Solid"></Image>
