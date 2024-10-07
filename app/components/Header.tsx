@@ -32,7 +32,7 @@ const Header = (props: Props) => {
         <div className="flex items-center gap-[30px] text-xl">
           <Link href="/Home">
           <h1
-            className={`cursor-pointer ${
+            className={`custom-cursor ${
               activeMenu === "home"
                 ? "scale-110 transform transition-transform duration-300 border-b-2 border-[#4390F2]"
                 : "hover:text-white/50"
@@ -44,7 +44,7 @@ const Header = (props: Props) => {
           </Link>
           <Link href="/ExploreEvents">
           <h1
-            className={`cursor-pointer ${
+            className={`custom-cursor ${
               activeMenu === "explore"
                 ? "scale-110 transform transition-transform duration-300 border-b-2 border-[#4390F2]"
                 : "hover:text-white/50"
@@ -56,7 +56,7 @@ const Header = (props: Props) => {
           </Link>
           <Link href="/CreateEvent">
           <h1
-            className={`cursor-pointer ${
+            className={`custom-cursor ${
               activeMenu === "create"
                 ? "scale-110 transform transition-transform duration-300 border-b-2 border-[#4390F2]"
                 : "hover:text-white/50"
@@ -66,10 +66,10 @@ const Header = (props: Props) => {
             Create Events
           </h1>
           </Link>
-          <Link href="/Onboarding">
+          <Link href="/Onboarding" className=" ">
           <motion.button
             whileTap={{ scale: 0.9 }}
-            className="flex items-center bg-[#4F7CBB] p-1 px-4 rounded-full text-white"
+            className="flex items-center bg-[#4F7CBB] p-1 px-4 rounded-full text-white custom-cursor"
           >
             Sign In
             <Image
@@ -140,7 +140,7 @@ const Header = (props: Props) => {
         >
           <div className=" items-center mx-auto px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <h1
-              className={`cursor-pointer ${
+              className={`custom-cursor ${
                 activeMenu === "home"
                   ? "text-lg transform transition-transform duration-300"
                   : "hover:text-white/50"
@@ -150,7 +150,7 @@ const Header = (props: Props) => {
               Home
             </h1>
             <h1
-              className={`cursor-pointer ${
+              className={`custom-cursor ${
                 activeMenu === "explore"
                   ? "text-lg transform transition-transform duration-300"
                   : "hover:text-white/50"
@@ -160,7 +160,7 @@ const Header = (props: Props) => {
               Explore Events
             </h1>
             <h1
-              className={`cursor-pointer ${
+              className={`custom-cursor ${
                 activeMenu === "create"
                   ? "text-lg transform transition-transform duration-300"
                   : "hover:text-white/50"
