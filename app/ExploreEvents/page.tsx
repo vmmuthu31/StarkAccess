@@ -23,7 +23,7 @@ const Page = (props: Props) => {
           </div>
           <div className="max-w-5xl mx-auto pt-16">
             <p className=" text-4xl pl-4">Events</p>
-            <div className="grid grid-cols-3 py-6">
+            <div className="md:grid md:grid-cols-2 lg:grid-cols-3 py-6 gap-4 lg:gap-6 space-y-4 md:space-y-0">
               {events.map((event) => (
                 <EventCard key={event.id} event={event} />
               ))}

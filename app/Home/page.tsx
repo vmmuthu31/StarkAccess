@@ -7,10 +7,11 @@ import { motion } from "framer-motion";
 import Explore from "./components/Explore";
 import Footer from "../components/Footer";
 import TwoCards from "./components/TwoCards";
+import Link from "next/link";
 
 const Page = () => {
   return (
-    <div className="min-h-screen text-white">
+    <div className="min-h-screen text-white custom-cursor">
       {/* White background extending throughout the page */}
       <div className="bg-[#EDF3FD] min-h-screen w-full">
         {/* Section with the background image limited to screen height */}
@@ -48,28 +49,32 @@ const Page = () => {
                 </h1>
 
                 <div className="flex relative justify-center gap-4 text-xs md:text-base">
+                  <Link href="/CreateEvent">
                   <motion.button
                     whileTap={{ scale: 0.9 }}
                     className="text-[#3581F1] gap-1 bg-white p-2 px-3 flex items-center border-4 border-[#78ABFC] rounded-[10px]"
                   >
-                    Create your Event{" "}
+                    Create your Event
                     <Image
                       className="h-4 md:h-6 w-auto"
                       src={Assets.ArrowRightBlue}
                       alt="ArrowRight"
                     ></Image>{" "}
                   </motion.button>
+                  </Link>
+                  <Link href="/ExploreEvents">
                   <motion.button
                     whileTap={{ scale: 0.9 }}
                     className="p-2 px-3 gap-1 flex items-center border-2 border-white rounded-[10px]"
                   >
-                    Create your Event{" "}
+                    Explore Event{" "}
                     <Image
                       className="h-4 md:h-6 w-auto"
                       src={Assets.ArrowRightWhite}
                       alt="ArrowRight"
                     ></Image>{" "}
                   </motion.button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -81,7 +86,7 @@ const Page = () => {
                 alt="DottedArrowToRight"
               ></Image>
               <Image
-                className="w-1/3 absolute right-0 top-[-180px]"
+                className="w-1/3 absolute right-0 top-[-180px] flex md:hidden lg:flex"
                 src={Assets.DottedArrowToLeft}
                 alt="DottedArrowToLeft"
               ></Image>
