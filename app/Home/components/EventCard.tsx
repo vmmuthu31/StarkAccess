@@ -1,6 +1,7 @@
+"use client";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import Assets from "@/app/components/Assets/Assets"; // Import Assets
+import Assets from "@/app/components/Assets/Assets";
 
 type EventCardProps = {
   event: {
@@ -43,7 +44,9 @@ const EventCard = ({ event }: EventCardProps) => {
       <p className="text-xl h-14 overflow-hidden text-ellipsis line-clamp-2">
         {event.title}
       </p>
-      <h1 className="text-sm h-16 overflow-hidden text-ellipsis line-clamp-3">{event.description}</h1>
+      <h1 className="text-sm h-16 overflow-hidden text-ellipsis line-clamp-3">
+        {event.description}
+      </h1>
       <div className="text-sm space-y-1 h-[74px]">
         <h1 className="flex items-center gap-1">
           {Assets.Calendar && (
