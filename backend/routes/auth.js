@@ -83,4 +83,35 @@ router.post("/login", async (req, res) => {
   }
 });
 
+
+router.post("/change-password", authenticateToken, async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+
+  try {
+    const user = await User.findById(req.user.id);
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Incorrect current password" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    return res.status(200).json({ message: "Password changed successfully" });
+  } catch (err) {
+    return res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+
+router.post("/logout", (req, res) => {
+  // Assuming the token is stored in cookies, you can clear it
+  res.clearCookie("token");
+  return res.status(200).json({ message: "Logged out successfully" });
+});
+
+
 module.exports = router;
