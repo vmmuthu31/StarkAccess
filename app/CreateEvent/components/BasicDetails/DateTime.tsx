@@ -1,17 +1,19 @@
 import Image from "next/image";
 import Assets from "@/app/components/Assets/Assets";
 import React, { useState, useEffect, useRef } from "react";
+import moment from "moment-timezone";
 
+// List of timezones for the dropdown
+const timezones = moment.tz.names();
 
 type Props = {}
-
 
 const DateTime = (props: Props) => {
     const [selectedStartDate, setSelectedStartDate] = useState("");
     const [selectedEndDate, setSelectedEndDate] = useState("");
     const [selectedStartTime, setSelectedStartTime] = useState("");
     const [selectedEndTime, setSelectedEndTime] = useState("");
-    const [selectedTimeZone, setSelectedTimeZone] = useState("GMT+8:00");
+    const [selectedTimeZone, setSelectedTimeZone] = useState("Asia/Singapore");
     const [isStartDateVisible, setIsStartDateVisible] = useState(false);
     const [isEndDateVisible, setIsEndDateVisible] = useState(false);
     const [isStartTimeVisible, setIsStartTimeVisible] = useState(false);
@@ -22,6 +24,7 @@ const DateTime = (props: Props) => {
     const endDateRef = useRef<HTMLDivElement>(null);
     const startTimeRef = useRef<HTMLDivElement>(null);
     const endTimeRef = useRef<HTMLDivElement>(null);
+    const timeZoneRef = useRef<HTMLDivElement>(null);
   
     const Handlestartdatechange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setSelectedStartDate(e.target.value);
@@ -45,21 +48,18 @@ const DateTime = (props: Props) => {
   
     const Formatdate = (dateString: string) => {
       if (!dateString) return "";
-      const date = new Date(dateString);
-      return date.toLocaleDateString("en-US", {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-      });
+      const date = moment.tz(dateString, selectedTimeZone);
+      return date.format("ddd, MMM D");
     };
   
     const Formattime = (timeString: string) => {
       if (!timeString) return "";
-      const [hour, minute] = timeString.split(":");
-      const isPM = Number(hour) >= 12;
-      const formattedHour = Number(hour) % 12 || 12;
-      const formattedMinute = minute.padStart(2, "0");
-      return `${formattedHour}:${formattedMinute} ${isPM ? "PM" : "AM"}`;
+      const time = moment.tz(`${selectedStartDate} ${timeString}`, selectedTimeZone);
+      return time.format("h:mm A");
+    };
+
+    const handleTimezoneChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSelectedTimeZone(e.target.value);
     };
   
     // Detect outside clicks to close dropdowns
@@ -106,7 +106,6 @@ const DateTime = (props: Props) => {
           <div className="bg-[#DAE7FC] w-full h-[109px] p-2 px-4 rounded-[10px] border border-[#4390F2]/40 flex items-center">
                   <div className="">
                     {/* Start Date and Time */}
-                    
                     <div className=" flex items-center">
                       <div className=" flex items-center gap-2 w-[60px]">
                         <Image src={Assets.DotSolid} alt="Dot Solid"></Image>
@@ -186,7 +185,7 @@ const DateTime = (props: Props) => {
                             }}
                           >
                             {selectedEndDate
-                              ? formatDate(selectedEndDate)
+                              ? Formatdate(selectedEndDate)
                               : "Sat, Oct 5"}
                           </div>
                           {isEndDateVisible && (
@@ -210,7 +209,7 @@ const DateTime = (props: Props) => {
                             }
                           >
                             {selectedEndTime
-                              ? formatTime(selectedEndTime)
+                              ? Formattime(selectedEndTime)
                               : "7:30 pm"}
                           </div>
                           {isEndTimeVisible && (
@@ -225,13 +224,25 @@ const DateTime = (props: Props) => {
                       </div>
                     </div>
                   </div>
-                  {/* <div className="flex items-center w-fit text-xs justify-center gap-2 ml-2 p-2 px-4 rounded-[10px] text-center  text-[#98A0A8] bg-[#FFFFFF]/60 border border-[#DAE7FC]">
-                  <div>Time zone:</div>
-                  <div className="font-bold">GMT+8:00</div>
-                </div> */}
-                </div>
-    </div>
-  )
-}
 
-export default DateTime
+                {/* Timezone Selector */}
+                <div ref={timeZoneRef} className="flex items-center w-fit text-xs justify-center gap-2 ml-2 p-2 px-4 rounded-[10px] text-center  text-[#98A0A8] bg-[#FFFFFF]/60 border border-[#DAE7FC]">
+                  <div>Time zone:</div>
+                  <select
+                    value={selectedTimeZone}
+                    onChange={handleTimezoneChange}
+                    className="font-bold bg-transparent border-none outline-none"
+                  >
+                    {timezones.map((zone, index) => (
+                      <option key={index} value={zone}>
+                        {zone}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+          </div>
+    </div>
+  );
+};
+
+export default DateTime;

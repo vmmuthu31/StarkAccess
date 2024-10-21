@@ -1,5 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const authenticateToken = require("../middleware/authenticateToken");
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const sendEmail = require("../utils/SendEmail");
@@ -108,10 +109,7 @@ router.post("/change-password", authenticateToken, async (req, res) => {
 
 
 router.post("/logout", (req, res) => {
-  // Assuming the token is stored in cookies, you can clear it
   res.clearCookie("token");
   return res.status(200).json({ message: "Logged out successfully" });
 });
-
-
 module.exports = router;

@@ -91,7 +91,6 @@ router.put("/suspend", authenticateToken, isAdmin, async (req, res) => {
     user.suspensionEndDate = suspensionEndDate;
     await user.save();
 
-    // Log the suspension action
     const adminAction = new AdminAction({
       admin: req.user.id,
       action: "Suspended User",
@@ -123,7 +122,6 @@ router.put("/ban", authenticateToken, isAdmin, async (req, res) => {
     user.suspensionEndDate = null;
     await user.save();
 
-    // Log the ban action
     const adminAction = new AdminAction({
       admin: req.user.id,
       action: "Banned User",
@@ -159,8 +157,6 @@ router.put("/revive", authenticateToken, isAdmin, async (req, res) => {
     user.suspensionEndDate = null;
     user.isBanned = false;
     await user.save();
-
-    // Log the revive action
     const adminAction = new AdminAction({
       admin: req.user.id,
       action: "Revived User",

@@ -1,13 +1,38 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import DateTime from "./DateTime";
 
+// Define the type for props with the onNext callback function
 type Props = {
-  onNext: () => void; // Add this prop type
+  onNext: () => void;
 };
 
 const Page = ({ onNext }: Props) => {
+  const [locationQuery, setLocationQuery] = useState("");
+  const [locationSuggestions, setLocationSuggestions] = useState<any[]>([]);
+
+  // Function to handle location input change and fetch suggestions
+  const handleLocationChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setLocationQuery(query);
+
+    if (query.length > 2) {
+      const url = `https://nominatim.openstreetmap.org/search?q=${query}&format=json`;
+      const response = await fetch(url);
+      const data = await response.json();
+      setLocationSuggestions(data);
+    } else {
+      setLocationSuggestions([]);
+    }
+  };
+
+  // Handle location selection
+  const handleLocationSelect = (location: any) => {
+    setLocationQuery(location.display_name);
+    setLocationSuggestions([]);
+  };
+
   return (
     <div>
       <div className="flex space-x-10 pt-6">
@@ -65,11 +90,30 @@ const Page = ({ onNext }: Props) => {
                     <span className="ml-2">If virtual</span>
                   </label>
                 </div>
+
+                {/* Location Input with Autocomplete */}
                 <input
                   type="text"
+                  value={locationQuery}
+                  onChange={handleLocationChange}
                   placeholder="Add location"
                   className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
                 />
+
+                {/* Location Suggestions */}
+                {locationSuggestions.length > 0 && (
+                  <ul className="absolute bg-white shadow-md rounded-lg w-full mt-1">
+                    {locationSuggestions.map((suggestion, index) => (
+                      <li
+                        key={index}
+                        onClick={() => handleLocationSelect(suggestion)}
+                        className="p-2 cursor-pointer hover:bg-gray-200"
+                      >
+                        {suggestion.display_name}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
 
               <div className="space-y-1">
