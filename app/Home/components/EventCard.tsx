@@ -33,7 +33,7 @@ const EventCard = ({ event }: EventCardProps) => {
         </div>
         {Assets[event.logo] && (
           <Image
-            className="h-14 w-auto absolute bottom-[-20px] right-0 transition-transform duration-500 hover:scale-110"
+            className="h-14 w-auto absolute bottom-[-20px] right-0 transition-transform duration-500 hover:scale-110 rounded-full"
             src={Assets[event.logo]}
             alt="Event Logo"
             width={56}

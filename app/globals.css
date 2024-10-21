@@ -56,10 +56,10 @@ h1 {
 }
 
 
-/* Global button style with hover effect */
 button {
   opacity: 1; /* Default opacity */
   transition: opacity 0.3s ease; /* Smooth transition for opacity */
+  cursor: url('/cursor/cursor.svg'), auto; /* Custom cursor */
 }
 
 button:hover {
@@ -75,3 +75,35 @@ button:hover {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1),
               0px -4px 10px rgba(0, 0, 0, 0.1);
 }
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px; /* Adjust width to your liking */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #4390F2; /* Blue color from your UI */
+  border-radius: 10px; /* Rounded edges */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #357ac9; /* A darker shade on hover (optional) */
+}
+
+::-webkit-scrollbar-track {
+  background: #bad5ff; /* Transparent background */
+}
+
+
+body {
+  cursor: url('/cursor/cursor.svg'), auto;
+}
+
+.custom-cursor {
+  cursor: url('/cursor/cursor.svg'), auto;
+}
+
+.custom-cursor-round {
+  cursor: url('/cursor/round.svg');
+}
+

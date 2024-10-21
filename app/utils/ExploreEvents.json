@@ -28,6 +28,16 @@
       "location": "London, UK",
       "image": "Event3",
       "logo": "TPGLogo"
+    },
+    {
+      "id": 4,
+      "title": "Polygon Hacker House Bangkok",
+      "description": "Join the leading minds in the virtual world and blockchain space for this three-day event.",
+      "date": "December 5-7, 2024",
+      "time": "10:00 AM - 5:00 PM",
+      "location": "New York, NY",
+      "image": "Event2",
+      "logo": "PolygonLogo"
     }
   ]
   

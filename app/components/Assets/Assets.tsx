@@ -25,7 +25,9 @@ import Event3 from "@/app/Assets/Events/event3.png"
 import Calendar from "@/app/Assets/Icons/Calendar.svg";
 import Time from "@/app/Assets/Icons/Time.svg";
 import Location from "@/app/Assets/Icons/Location.svg";
-
+import StartEnd from "@/app/Assets/StartEnd.svg";
+import DotSolid from "@/app/Assets/Icons/DotSolid.svg";
+import DotOutline from "@/app/Assets/Icons/DotOutline.svg"
 
 const Assets = {
   Logo,
@@ -54,7 +56,10 @@ const Assets = {
   Event3,
   Calendar,
   Time,
-  Location
+  Location,
+  StartEnd,
+  DotSolid,
+  DotOutline
 };
 
 export default Assets;
