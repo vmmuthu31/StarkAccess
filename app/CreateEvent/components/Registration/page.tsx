@@ -1,16 +1,21 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
+import Selection from "./Selection";
+import QuesReview from "./QuesReview"
+import Question from "./Question";
 
 type Props = {
-  onNext: () => void; // Add this prop type
-  onBack: () => void; // Add this prop type
+  onNext: () => void;
+  onBack: () => void;
 };
 
 const Page = ({ onNext, onBack }: Props) => {
+
+
   return (
     <div>
-      <div className="flex space-x-10 pt-6">
+      <div className="flex space-x-10 pt-6 text-black">
         <div className="space-y-4 w-[212px]">
           <p className="text-[#98A0A8] text-lg border-t-[3px] border-[#98A0A8] pt-2 w-full">
             Basic Event Details
@@ -23,7 +28,32 @@ const Page = ({ onNext, onBack }: Props) => {
           </p>
         </div>
         <div className="">
-          {/* Registration form elements here */}
+          <div className=" flex space-x-10">
+            <div className=" w-[478px] space-y-3">
+              <div className=" space-y-1">
+                <p className="text-lg">Maximum Capacity</p>
+                <input
+                  type="text"
+                  placeholder="Enter the maximum number of tickets available."
+                  className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#DAE7FC]"
+                />
+              </div>
+              <div className=" space-y-1">
+                <p className="text-lg">Registration Question</p>
+                <h1 className=" text-[#98A0A8]">
+                  We will ask guests the following questions when they register.
+                </h1>
+                <Selection />
+              </div>
+              <Question />
+            </div>
+            {/* Right Side */}
+            <div className="space-y-1 w-[363px]">
+              <p className=" text-lg">Review Questions</p>
+              <QuesReview />
+            </div>
+          </div>
+
           <div className="flex relative justify-center gap-4 text-xs md:text-base pt-6">
             <motion.button
               whileTap={{ scale: 0.9 }}

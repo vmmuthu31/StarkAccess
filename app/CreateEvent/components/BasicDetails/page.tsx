@@ -51,7 +51,7 @@ const Page = ({ onNext }: Props) => {
                       type="radio"
                       name="option"
                       value="option1"
-                      className="form-radio text-blue-600"
+                      className="form-radio text-[#4390F2]"
                     />
                     <span className="ml-2">If in-person</span>
                   </label>
@@ -60,7 +60,7 @@ const Page = ({ onNext }: Props) => {
                       type="radio"
                       name="option"
                       value="option2"
-                      className="form-radio text-blue-600"
+                      className="form-radio text-[#4390F2]"
                     />
                     <span className="ml-2">If virtual</span>
                   </label>
