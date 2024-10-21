@@ -2,9 +2,9 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
 import BasicDetails from "../CreateEvent/components/BasicDetails/page";
-import Registration from "../CreateEvent/components/Registration/page"; // Adjust the import path as necessary
-import Customization from "../CreateEvent/components/Customization/page"; // New customization component
-import Footer from "../components/Footer";
+import Registration from "../CreateEvent/components/Registration/page";
+import Customization from "../CreateEvent/components/Customization/page"; 
+// import Footer from "../components/Footer";
 
 type Props = {};
 
@@ -52,9 +52,9 @@ const Page = (props: Props) => {
             <div className="mx-auto">{Rendercomponent()}</div>
           </div>
         </div>
-        <div className="absolute bottom-0 w-full">
+        {/* <div className="absolute bottom-0 w-full">
           <Footer />
-        </div>
+        </div> */}
       </div>
     </div>
   );
