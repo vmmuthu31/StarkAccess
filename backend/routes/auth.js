@@ -84,6 +84,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
+
 router.post("/change-password", authenticateToken, async (req, res) => {
   const { currentPassword, newPassword } = req.body;
 
@@ -111,5 +112,4 @@ router.post("/logout", (req, res) => {
   res.clearCookie("token");
   return res.status(200).json({ message: "Logged out successfully" });
 });
-
 module.exports = router;

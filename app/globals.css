@@ -1,11 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Epilogue:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap');
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
+
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -25,3 +27,83 @@ body {
     text-wrap: balance;
   }
 }
+
+@font-face {
+  font-family: 'SequelSansBookHead';
+  src: url('/fonts/SequelSansBookHead.otf') format('opentype');
+}
+@font-face {
+  font-family: 'SequelSansMediumDisp';
+  src: url('/fonts/SequelSansMediumDisp.otf') format('opentype');
+}
+@font-face {
+  font-family: 'SequelSansBoldHead';
+  src: url('/fonts/SequelSansBoldHead.otf') format('opentype');
+}
+
+.bricolage-font {
+  font-family: "Bricolage Grotesque";
+}
+
+p, button {
+  font-family: 'SequelSansMediumDisp', sans-serif;
+}
+h1 {
+  font-family: 'SequelSansBookHead', sans-serif;
+}
+.BoldHead {
+  font-family: 'SequelSansBoldHead', sans-serif;
+}
+
+
+button {
+  opacity: 1; /* Default opacity */
+  transition: opacity 0.3s ease; /* Smooth transition for opacity */
+  cursor: url('/cursor/cursor.svg'), auto; /* Custom cursor */
+}
+
+button:hover {
+  opacity: 0.6; /* Reduced opacity on hover */
+}
+
+.bgImg{
+    background-size: full;
+}
+
+
+.custom-shadow {
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1),
+              0px -4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px; /* Adjust width to your liking */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #4390F2; /* Blue color from your UI */
+  border-radius: 10px; /* Rounded edges */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #357ac9; /* A darker shade on hover (optional) */
+}
+
+::-webkit-scrollbar-track {
+  background: #bad5ff; /* Transparent background */
+}
+
+
+body {
+  cursor: url('/cursor/cursor.svg'), auto;
+}
+
+.custom-cursor {
+  cursor: url('/cursor/cursor.svg'), auto;
+}
+
+.custom-cursor-round {
+  cursor: url('/cursor/round.svg');
+}
+
