@@ -2,8 +2,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Selection from "./Selection";
-import QuesReview from "./QuesReview"
-import Question from "./Question";
+import QuesReview from "./QuesReview";
 
 type Props = {
   onNext: () => void;
@@ -11,7 +10,7 @@ type Props = {
 };
 
 const Page = ({ onNext, onBack }: Props) => {
-
+  const [questions, setQuestions] = useState<any[]>([]); // State to store questions
 
   return (
     <div>
@@ -43,14 +42,13 @@ const Page = ({ onNext, onBack }: Props) => {
                 <h1 className=" text-[#98A0A8]">
                   We will ask guests the following questions when they register.
                 </h1>
-                <Selection />
+                <Selection setQuestions={setQuestions} />
               </div>
-              <Question />
             </div>
             {/* Right Side */}
             <div className="space-y-1 w-[363px]">
               <p className=" text-lg">Review Questions</p>
-              <QuesReview />
+              <QuesReview questions={questions} setQuestions={setQuestions} />
             </div>
           </div>
 
