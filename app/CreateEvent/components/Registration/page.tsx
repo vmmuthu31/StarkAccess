@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Selection from "./Selection";
 import QuesReview from "./QuesReview";
+import { Question } from "./Types";
 
 type Props = {
   onNext: () => void;
@@ -11,6 +12,7 @@ type Props = {
 
 const Page = ({ onNext, onBack }: Props) => {
   const [questions, setQuestions] = useState<any[]>([]); // State to store questions
+  const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
 
   return (
     <div>
@@ -37,18 +39,28 @@ const Page = ({ onNext, onBack }: Props) => {
                   className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#DAE7FC]"
                 />
               </div>
-              <div className=" space-y-1">
+              <div className="space-y-1">
                 <p className="text-lg">Registration Question</p>
                 <h1 className=" text-[#98A0A8]">
                   We will ask guests the following questions when they register.
                 </h1>
-                <Selection setQuestions={setQuestions} />
+                <Selection
+                  setQuestions={setQuestions}
+                  editingQuestion={editingQuestion}
+                  setEditingQuestion={setEditingQuestion}
+                  questions={questions}
+                />
               </div>
+
             </div>
             {/* Right Side */}
             <div className="space-y-1 w-[363px]">
               <p className=" text-lg">Review Questions</p>
-              <QuesReview questions={questions} setQuestions={setQuestions} />
+              <QuesReview
+                questions={questions}
+                setQuestions={setQuestions}
+                setEditingQuestion={setEditingQuestion}
+              />
             </div>
           </div>
 

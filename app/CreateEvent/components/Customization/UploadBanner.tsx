@@ -34,6 +34,7 @@ const UploadBanner = (props: Props) => {
         <input
           id="file-upload"
           type="file"
+          accept=".png, .jpg, .jpeg"
           className="hidden"
           onChange={Handlebannerchange}
         />

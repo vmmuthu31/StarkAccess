@@ -1,77 +1,92 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiCheckSquare, FiType, FiUser } from "react-icons/fi";
 import { IoIosList } from "react-icons/io";
 import { motion } from "framer-motion";
+import { Question } from "./Types"; // Assuming you have a Question type in your Types file
 
-type SelectionType = "text" | "option" | "checkbox" | "social";
-type Question = {
-  id: number;
-  type: SelectionType;
-  required: boolean;
-  question: string;
-  options?: string[];
-  socialId?: string;
+type SelectionProps = {
+  setQuestions: (questions: Question[]) => void;
+  editingQuestion: Question | null;
+  setEditingQuestion: (question: Question | null) => void;
+  questions: Question[];
 };
 
-const Selection = ({ setQuestions }: { setQuestions: any }) => {
-  const [currentQuestionId, setCurrentQuestionId] = useState<number>(0);
-  const [questionList, setQuestionList] = useState<Question[]>([]);
+const Selection = ({
+  setQuestions,
+  editingQuestion,
+  setEditingQuestion,
+  questions,
+}: SelectionProps) => {
+  const [currentQuestionId, setCurrentQuestionId] = useState<number>(
+    questions.length > 0 ? questions[questions.length - 1].id + 1 : 1
+  );
 
-  const addQuestionToReview = (question: Question) => {
-    setQuestions((prev: any) => [...prev, question]);
-    setQuestionList([]); // Reset question list for new input
+  const [question, setQuestion] = useState<Question>({
+    id: currentQuestionId,
+    type: "text",
+    required: false,
+    question: "",
+    options: [],
+    github: "",
+    linkedin: "",
+    twitter: "",
+    telegram: "",
+    discord: "",
+  });
+
+  useEffect(() => {
+    if (editingQuestion) {
+      setQuestion(editingQuestion);
+    }
+  }, [editingQuestion]);
+
+  const addQuestionToReview = () => {
+    if (editingQuestion) {
+      // Update existing question
+      setQuestions((prevQuestions) =>
+        prevQuestions.map((q) => (q.id === question.id ? question : q))
+      );
+      setEditingQuestion(null); // Clear editing state
+    } else {
+      // Add new question
+      setQuestions((prevQuestions) => [...prevQuestions, question]);
+      setCurrentQuestionId(currentQuestionId + 1);
+    }
+    resetQuestion(); // Reset fields for next question
   };
 
-  // Function to handle selection type and add question
-  const handleSelection = (type: SelectionType) => {
-    const newQuestion: Question = {
-      id: currentQuestionId,
-      type,
+  const resetQuestion = () => {
+    setQuestion({
+      id: currentQuestionId + 1,
+      type: "text",
       required: false,
       question: "",
-      options: type === "option" ? [] : undefined,
-    };
-
-    setCurrentQuestionId(currentQuestionId + 1);
-    setQuestionList([...questionList, newQuestion]);
+      options: [],
+      github: "",
+      linkedin: "",
+      twitter: "",
+      telegram: "",
+      discord: "",
+    });
   };
 
   // Handle input changes
-  const handleInputChange = (id: number, field: string, value: string) => {
-    setQuestionList((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, [field]: value } : q))
-    );
+  const handleInputChange = (field: string, value: string) => {
+    setQuestion((prev) => ({ ...prev, [field]: value }));
   };
 
   // Handle required checkbox toggle
-  const handleRequiredChange = (id: number) => {
-    setQuestionList((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, required: !q.required } : q))
-    );
+  const handleRequiredChange = () => {
+    setQuestion((prev) => ({ ...prev, required: !prev.required }));
   };
 
   // Handle option field addition
-  const handleOptionChange = (id: number, option: string) => {
-    setQuestionList((prev) =>
-      prev.map((q) =>
-        q.id === id && q.options
-          ? { ...q, options: [...q.options, option] }
-          : q
-      )
-    );
-  };
-
-  // Social ID validation
-  const validateSocialId = (value: string) => {
-    const socialIdPatterns = [
-      /https:\/\/github.com\/.+/,
-      /https:\/\/linkedin.com\/in\/.+/,
-      /https:\/\/twitter.com\/.+/,
-      /https:\/\/t.me\/.+/, // Telegram
-      /https:\/\/discord.com\/.+/,
-    ];
-    return socialIdPatterns.some((pattern) => pattern.test(value));
+  const handleOptionChange = (option: string) => {
+    setQuestion((prev) => ({
+      ...prev,
+      options: [...prev.options, option],
+    }));
   };
 
   return (
@@ -81,7 +96,9 @@ const Selection = ({ setQuestions }: { setQuestions: any }) => {
         <motion.p
           whileTap={{ scale: 0.9 }}
           className="text-[#4390F2] border border-[#4390F2] p-2 px-3 rounded-[6px] cursor-pointer hover:bg-[#4390F2] hover:text-white"
-          onClick={() => handleSelection("text")}
+          onClick={() =>
+            setQuestion((prev) => ({ ...prev, type: "text", options: [] }))
+          }
         >
           <FiType className="mr-2" />
           Text
@@ -89,7 +106,9 @@ const Selection = ({ setQuestions }: { setQuestions: any }) => {
         <motion.p
           whileTap={{ scale: 0.9 }}
           className="text-[#4390F2] border border-[#4390F2] p-2 px-3 rounded-[6px] cursor-pointer hover:bg-[#4390F2] hover:text-white"
-          onClick={() => handleSelection("option")}
+          onClick={() =>
+            setQuestion((prev) => ({ ...prev, type: "option", options: [] }))
+          }
         >
           <IoIosList className="mr-2" />
           Option
@@ -97,7 +116,9 @@ const Selection = ({ setQuestions }: { setQuestions: any }) => {
         <motion.p
           whileTap={{ scale: 0.9 }}
           className="text-[#4390F2] border border-[#4390F2] p-2 px-3 rounded-[6px] cursor-pointer hover:bg-[#4390F2] hover:text-white"
-          onClick={() => handleSelection("checkbox")}
+          onClick={() =>
+            setQuestion((prev) => ({ ...prev, type: "checkbox", options: [] }))
+          }
         >
           <FiCheckSquare className="mr-2" />
           Checkbox
@@ -105,7 +126,9 @@ const Selection = ({ setQuestions }: { setQuestions: any }) => {
         <motion.p
           whileTap={{ scale: 0.9 }}
           className="text-[#4390F2] border border-[#4390F2] p-2 px-3 rounded-[6px] cursor-pointer hover:bg-[#4390F2] hover:text-white"
-          onClick={() => handleSelection("social")}
+          onClick={() =>
+            setQuestion((prev) => ({ ...prev, type: "social", options: [] }))
+          }
         >
           <FiUser className="mr-2" />
           Social IDs
@@ -113,102 +136,125 @@ const Selection = ({ setQuestions }: { setQuestions: any }) => {
       </div>
 
       {/* Render Question Fields Based on Selection */}
-      {questionList.map((question, index) => (
-        <div key={question.id} className="space-y-2">
-          <p className="text-lg">Question {index + 1}</p>
-          <input
-            type="text"
-            value={question.question}
-            placeholder="Enter your question here"
-            className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#DAE7FC]"
-            onChange={(e) =>
-              handleInputChange(question.id, "question", e.target.value)
-            }
-          />
+      <div className="space-y-2">
+        <p className="text-lg">Question</p>
+        <input
+          type="text"
+          value={question.question}
+          placeholder="Enter your question here"
+          className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#DAE7FC]"
+          onChange={(e) => handleInputChange("question", e.target.value)}
+        />
 
-          {/* Conditional Inputs Based on Question Type */}
-          {question.type === "text" && (
-            <div>
-              <p>Answer (Text)</p>
-              <input
-                type="text"
-                className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#f0f4fa]"
-                disabled
-              />
-            </div>
-          )}
-
-          {question.type === "option" && (
-            <div>
-              <p>Options</p>
-              <input
-                type="text"
-                placeholder="Add an option and press enter"
-                className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#f0f4fa]"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
-                    handleOptionChange(question.id, e.currentTarget.value);
-                    e.currentTarget.value = ""; // Clear input
-                  }
-                }}
-              />
-              <ul className="space-y-1">
-                {question.options?.map((option, idx) => (
-                  <li key={idx} className="text-[#4390F2]">
-                    {option}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {question.type === "checkbox" && (
-            <div className="flex items-center gap-2">
-              <input type="checkbox" className="w-5 h-5" disabled />
-              <p className="text-lg">Check this option</p>
-            </div>
-          )}
-
-          {question.type === "social" && (
-            <div>
-              <p>
-                Enter your social ID (GitHub, LinkedIn, Twitter, Telegram,
-                Discord)
-              </p>
-              <input
-                type="text"
-                placeholder="Enter social ID URL"
-                className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#f0f4fa]"
-                onChange={(e) => {
-                  const isValid = validateSocialId(e.target.value);
-                  handleInputChange(question.id, "socialId", e.target.value);
-                  e.target.style.borderColor = isValid ? "green" : "red";
-                }}
-              />
-            </div>
-          )}
-
-          {/* Required Checkbox */}
-          <div className="flex items-center gap-2">
+        {/* Conditional Inputs Based on Question Type */}
+        {question.type === "text" && (
+          <div>
+            <p>Answer (Text)</p>
             <input
-              type="checkbox"
-              checked={question.required}
-              onChange={() => handleRequiredChange(question.id)}
-              className="w-5 h-5"
+              type="text"
+              className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#f0f4fa]"
+              disabled
             />
-            <p className="text-lg">Required</p>
           </div>
+        )}
 
-          <hr className="border-gray-300" />
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            className="mt-2 bg-[#4390F2] text-white p-2 px-5 rounded-[10px]"
-            onClick={() => addQuestionToReview(question)}
+{question.type === "option" && (
+  <div>
+    <p>Options</p>
+    <div className="flex items-center mb-2 border border-gray-300 rounded-lg p-2 bg-[#f0f4fa]">
+      {/* Render the capsules inside the input area */}
+      <div className="flex flex-wrap gap-2">
+        {question.options.map((option, idx) => (
+          <div
+            key={idx}
+            className="bg-[#3B82F6] text-white rounded-full px-3 py-1 text-sm flex items-center"
           >
-            Add to Review
-          </motion.button>
+            {option}
+            <button
+              className="ml-2 text-white focus:outline-none text-2xl" // Increased size for the 'x' button
+              onClick={() => {
+                const updatedOptions = question.options.filter((_, index) => index !== idx);
+                setQuestion((prev) => ({ ...prev, options: updatedOptions }));
+              }}
+            >
+              &times;
+            </button>
+          </div>
+        ))}
+      </div>
+      {/* Input field for adding new options */}
+      <input
+        type="text"
+        placeholder="Add an option and press enter or tab"
+        className="flex-1 h-[53px] p-2 bg-transparent border-none outline-none"
+        onKeyDown={(e) => {
+          if ((e.key === "Enter" || e.key === "Tab") && e.currentTarget.value.trim() !== "") {
+            e.preventDefault(); // Prevent default tab behavior
+            handleOptionChange(e.currentTarget.value);
+            e.currentTarget.value = ""; // Clear input
+          }
+        }}
+      />
+    </div>
+  </div>
+)}
+
+
+
+
+        {question.type === "checkbox" && (
+          <div className="flex items-center gap-2">
+            <input type="checkbox" className="w-5 h-5" disabled />
+            <p className="text-lg">Check this option</p>
+          </div>
+        )}
+
+        {question.type === "social" && (
+          <div>
+            <p>Select the social platforms:</p>
+
+            {/* Social media platform checkboxes */}
+            <div className="space-y-2">
+              {["GitHub", "LinkedIn", "Twitter", "Telegram", "Discord"].map((platform) => (
+                <div key={platform} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id={platform}
+                    checked={question.options.includes(platform)}
+                    onChange={(e) => {
+                      const newOptions = e.target.checked
+                        ? [...question.options, platform]
+                        : question.options.filter((opt) => opt !== platform);
+                      setQuestion((prev) => ({ ...prev, options: newOptions }));
+                    }}
+                  />
+                  <label htmlFor={platform} className="text-lg">{platform}</label>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Required Checkbox */}
+        <div className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={question.required}
+            onChange={handleRequiredChange}
+            className="w-5 h-5"
+          />
+          <p className="text-lg">Required</p>
         </div>
-      ))}
+
+        <hr className="border-gray-300" />
+        <motion.button
+          whileTap={{ scale: 0.9 }}
+          className="mt-2 bg-[#4390F2] text-white p-2 px-5 rounded-[10px]"
+          onClick={addQuestionToReview}
+        >
+          {editingQuestion ? "Save Changes" : "Add to Review"}
+        </motion.button>
+      </div>
     </div>
   );
 };

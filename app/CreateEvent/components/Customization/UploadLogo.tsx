@@ -32,6 +32,7 @@ const UploadLogo = (props: Props) => {
 
         <input
           id="file-upload"
+          accept=".png, .jpg, .jpeg, .svg"
           type="file"
           className="hidden"
           onChange={Handlelogochange}
