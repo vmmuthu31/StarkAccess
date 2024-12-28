@@ -8,11 +8,18 @@ import { Question } from "./Types";
 type Props = {
   onNext: () => void;
   onBack: () => void;
+  setMaximumTickets: React.Dispatch<React.SetStateAction<number | null>>; 
+  maximumTickets: number | null; 
 };
 
-const Page = ({ onNext, onBack }: Props) => {
+const Page = ({onNext,onBack, maximumTickets,setMaximumTickets }:Props) => {
   const [questions, setQuestions] = useState<any[]>([]); // State to store questions
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
+ 
+
+  const handleMaxTicket = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMaximumTickets(Number(e.target.value));
+    };
 
   return (
     <div>
@@ -31,10 +38,13 @@ const Page = ({ onNext, onBack }: Props) => {
         <div className="">
           <div className=" flex space-x-10">
             <div className=" w-[478px] space-y-3">
-              <div className=" space-y-1">
+             
+              <div className="space-y-1">
                 <p className="text-lg">Maximum Capacity</p>
                 <input
-                  type="text"
+                  type="number"
+                  value={maximumTickets}
+                  onChange={handleMaxTicket}
                   placeholder="Enter the maximum number of tickets available."
                   className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#DAE7FC]"
                 />
@@ -51,7 +61,6 @@ const Page = ({ onNext, onBack }: Props) => {
                   questions={questions}
                 />
               </div>
-
             </div>
             {/* Right Side */}
             <div className="space-y-1 w-[363px]">
@@ -86,4 +95,4 @@ const Page = ({ onNext, onBack }: Props) => {
   );
 };
 
-export default Page;
+export default Page

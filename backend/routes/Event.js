@@ -15,10 +15,18 @@ const isAdmin = (req, res, next) => {
     return res.status(403).json({ message: "Access denied. Admin only." });
   }
 };
-
 router.post("/create-event", authenticateToken, async (req, res) => {
-  const { name, description, date, location, ticketPrice, maxTickets } =
-    req.body;
+  const { name, description, date, location, ticketPrice, maxTickets } = req.body;
+
+  // Validate input
+  if (!name || !description || !date || !location || !ticketPrice || !maxTickets) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+  if (typeof ticketPrice !== "number" || typeof maxTickets !== "number") {
+    return res
+      .status(400)
+      .json({ message: "ticketPrice and maxTickets must be numbers." });
+  }
 
   try {
     const event = new Event({
@@ -33,21 +41,45 @@ router.post("/create-event", authenticateToken, async (req, res) => {
 
     await event.save();
 
-    const user = await User.findById(req.user.id);
-
-    const subject = "Your Event is Live!";
-    const html = eventCreationEmailTemplate(user.name, name);
-    await sendEmail(user.email, subject, html);
-
-    return res
-      .status(201)
-      .json({ message: "Event created successfully", event });
+    return res.status(201).json({ message: "Event created successfully", event });
   } catch (err) {
-    return res
-      .status(500)
-      .json({ message: "Server error", error: err.message });
+    return res.status(500).json({ message: "Server error", error: err.message });
   }
 });
+
+// // , date,location
+// router.post("/create-event", authenticateToken, async (req, res) => {
+//   const { name, description ,ticketPrice, maxTickets } =
+// req.body;
+
+//   try {
+//     const event = new Event({
+//       name,
+//       description,
+//       // date,
+//       // location,
+//       ticketPrice,
+//       maxTickets,
+//       organizer: req.user.id,
+//     });
+
+//     await event.save();
+
+//     // const user = await User.findById(req.user.id);
+
+//     // const subject = "Your Event is Live!";
+//     // const html = eventCreationEmailTemplate(user.name, name);
+//     // await sendEmail(user.email, subject, html);
+
+//     return res
+//       .status(201)
+//       .json({ message: "Event created successfully", event });
+//   } catch (err) {
+//     return res
+//       .status(500)
+//       .json({ message: "Server error", error: err.message });
+//   }
+// });
 
 router.get("/all-events", authenticateToken, isAdmin, async (req, res) => {
   try {
@@ -59,9 +91,7 @@ router.get("/all-events", authenticateToken, isAdmin, async (req, res) => {
 
     return res.status(200).json({ events });
   } catch (err) {
-    return res
-      .status(500)
-      .json({ message: "Server error", error: err.message });
+    return res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 

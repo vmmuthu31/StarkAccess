@@ -3,14 +3,24 @@ import React, { useState } from "react";
 import Header from "../components/Header";
 import BasicDetails from "../CreateEvent/components/BasicDetails/page";
 import Registration from "../CreateEvent/components/Registration/page";
-import Customization from "../CreateEvent/components/Customization/page"; 
-// import Footer from "../components/Footer";
+import Customization from "../CreateEvent/components/Customization/page";
 
 type Props = {};
 
 const Page = (props: Props) => {
+  // State for managing steps
   const [currentStep, setCurrentStep] = useState<"basicDetails" | "registration" | "customization">("basicDetails");
 
+  // States for event details
+  const [eventName, setEventName] = useState("");
+  const [eventDescription, setEventDescription] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [ticketPrice, setTicketPrice] = useState<number | null>(null);
+  const [maximumTickets, setMaximumTickets] = useState<number | null>(null);
+ 
+  const [location, setLocation] = useState("");
+  // Navigation handlers
   const Handlenext = () => {
     if (currentStep === "basicDetails") {
       setCurrentStep("registration");
@@ -27,14 +37,69 @@ const Page = (props: Props) => {
     }
   };
 
+  // Dynamic component rendering
   const Rendercomponent = () => {
     switch (currentStep) {
       case "basicDetails":
-        return <BasicDetails onNext={Handlenext} />;
+        return (
+          <BasicDetails
+            eventName={eventName}
+            setEventName={setEventName}
+            eventDescription={eventDescription}
+            setEventDescription={setEventDescription}
+            startDate={startDate}
+            setStartDate={setStartDate}
+            startTime={startTime}
+            setStartTime={setStartTime}
+            setLocation={setLocation}
+            location={location}
+            ticketPrice={ticketPrice}
+            setTicketPrice={setTicketPrice}
+            maximumTickets={maximumTickets}
+            setMaximumTickets={setMaximumTickets}
+            onBack={Handleback}
+            onNext={Handlenext}
+          />
+        );
       case "registration":
-        return <Registration onNext={Handlenext} onBack={Handleback} />;
+        return (
+          <Registration
+          eventName={eventName}
+          setEventName={setEventName}
+          eventDescription={eventDescription}
+          setEventDescription={setEventDescription}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          startTime={startTime}
+          setStartTime={setStartTime}
+         
+          ticketPrice={ticketPrice}
+          setTicketPrice={setTicketPrice}
+          maximumTickets={maximumTickets}
+          setMaximumTickets={setMaximumTickets}
+          onBack={Handleback}
+          onNext={Handlenext}
+          />
+        );
       case "customization":
-        return <Customization onBack={Handleback} />;
+        return <Customization 
+            eventName={eventName}
+            setEventName={setEventName}
+            eventDescription={eventDescription}
+            setEventDescription={setEventDescription}
+            startDate={startDate}
+            setStartDate={setStartDate}
+            startTime={startTime}
+            setStartTime={setStartTime}
+            setLocation={setLocation}
+            location={location}
+            ticketPrice={ticketPrice}
+            setTicketPrice={setTicketPrice}
+            maximumTickets={maximumTickets}
+            setMaximumTickets={setMaximumTickets}
+            onBack={Handleback}
+            onNext={Handlenext}
+        />;
       default:
         return null;
     }
@@ -52,9 +117,6 @@ const Page = (props: Props) => {
             <div className="mx-auto">{Rendercomponent()}</div>
           </div>
         </div>
-        {/* <div className="absolute bottom-0 w-full">
-          <Footer />
-        </div> */}
       </div>
     </div>
   );
