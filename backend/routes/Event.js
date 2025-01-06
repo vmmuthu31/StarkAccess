@@ -81,19 +81,39 @@ router.post("/create-event", authenticateToken, async (req, res) => {
 //   }
 // });
 
-router.get("/all-events", authenticateToken, isAdmin, async (req, res) => {
-  try {
-    const events = await Event.find();
+// router.get("/all-events", authenticateToken, async (req, res) => {
+//   try {
+//     const events = await Event.find();
 
+//     if (!events || events.length === 0) {
+//       return res.status(404).json({ message: "No events found." });
+//     }
+
+//     return res.status(200).json({ events });
+//   } catch (err) {
+//     console.error("Error fetching events:", err.message);
+//     return res.status(500).json({ message: "Server error", error: err.message });
+//   }
+// });
+
+router.get("/all-events", authenticateToken, async (req, res) => {
+  try {
+    const events = await Event.find(); // Fetch all events
     if (!events || events.length === 0) {
       return res.status(404).json({ message: "No events found." });
     }
 
-    return res.status(200).json({ events });
+    res.status(200).json({
+      message: "Events fetched successfully",
+      events,
+    });
   } catch (err) {
-    return res.status(500).json({ message: "Server error", error: err.message });
+    console.error("Error fetching events:", err.message);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
+
+
 
 router.get("/event/:id", authenticateToken, async (req, res) => {
   try {
@@ -131,31 +151,31 @@ router.get("/my-events", authenticateToken, async (req, res) => {
   }
 });
 
+const { ObjectId } = require('mongoose').Types;
+
+
 router.delete("/event/:id", authenticateToken, isAdmin, async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id);
+    const eventId = req.params.id;
+
+    // Check if the ID is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(eventId)) {
+      return res.status(400).json({ message: "Invalid event ID" });
+    }
+
+    const event = await Event.findById(eventId);
 
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
     }
 
+    // Delete the event
     await event.deleteOne();
-    const adminAction = {
-      action: "Deleted Event",
-      targetId: event._id,
-      targetType: "event",
-      description: `Event "${event.name}" was deleted by admin.`,
-    };
-
-    await axios.post(`${URL}/api/admin/action`, adminAction, {
-      headers: { Authorization: `Bearer ${req.headers['authorization'].split(' ')[1]}` }, // Assuming JWT is used for authentication
-    });
 
     return res.status(200).json({ message: "Event deleted successfully" });
   } catch (err) {
-    return res
-      .status(500)
-      .json({ message: "Server error", error: err.message });
+    console.error("Error deleting event:", err);
+    return res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 

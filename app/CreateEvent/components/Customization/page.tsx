@@ -71,12 +71,12 @@ const Page = ({
     }
   };
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    setToken(storedToken);
-    console.log(location);
-    console.log(token);
-  }, []);
+  // useEffect(() => {
+  //   const storedToken = localStorage.getItem("token");
+  //   setToken(storedToken);
+  //   console.log(location);
+  //   console.log(token);
+  // }, []);
 
   return (
     <div>
