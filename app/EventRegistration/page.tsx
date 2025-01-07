@@ -1,4 +1,4 @@
-"use client"; // Ensure the file is marked as a client component
+"use client"; // Ensure this is at the top of your file
 
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -7,14 +7,15 @@ import axios from "axios";
 const EventRegistration = () => {
   const [event, setEvent] = useState(null);
   const router = useRouter();
-  const { eventId } = router.query; // Retrieve eventId from query parameters
+  const { eventId } = router.query;
 
   useEffect(() => {
+    // Wait for eventId to be available before fetching data
     if (eventId) {
       const fetchEventDetails = async () => {
         try {
           const response = await axios.get(`http://localhost:8080/api/Events/event/${eventId}`);
-          setEvent(response.data); // Set the event data
+          setEvent(response.data);
         } catch (error) {
           console.error("Error fetching event details:", error);
         }
@@ -22,14 +23,14 @@ const EventRegistration = () => {
 
       fetchEventDetails();
     }
-  }, [eventId]); // Fetch event details when eventId changes
+  }, [eventId]); // Depend on eventId to trigger the effect when it changes
 
   if (!eventId) {
-    return <div>Loading event...</div>; // Early return if eventId is missing
+    return <div>Loading event...</div>; // Return early if eventId is not available
   }
 
   if (!event) {
-    return <div>Loading event details...</div>; // Show loading state until event data is fetched
+    return <div>Loading event details...</div>; // Loading state while event data is being fetched
   }
 
   return (

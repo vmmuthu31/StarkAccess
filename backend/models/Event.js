@@ -1,21 +1,23 @@
 const { time } = require("console");
 const mongoose = require("mongoose");
-
 const eventSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
   date: { type: String, required: true },
- 
   location: { type: String, required: true },
+  banner: { type: String, required: true }, // URL for the banner image
+  logo: { type: String, required: true },   // URL for the logo image
   organizer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  co_organizers:[{
-    type:mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  }],
+  co_organizers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
   ticketPrice: { type: Number, required: true },
   maxTickets: { type: Number, required: true },
   ticketsSold: { type: Number, default: 0 },

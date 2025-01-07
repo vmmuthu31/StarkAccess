@@ -7,6 +7,9 @@ const sendEmail = require("../utils/SendEmail");
 const { default: axios } = require("axios");
 const { URL } = require("../constants");
 const router = express.Router();
+const multer = require('multer');
+const path = require('path');
+
 
 const isAdmin = (req, res, next) => {
   if (req.user.role === "admin" || req.user.role === "superadmin") {
@@ -15,37 +18,40 @@ const isAdmin = (req, res, next) => {
     return res.status(403).json({ message: "Access denied. Admin only." });
   }
 };
-router.post("/create-event", authenticateToken, async (req, res) => {
-  const { name, description, date, location, ticketPrice, maxTickets } = req.body;
 
-  // Validate input
-  if (!name || !description || !date || !location || !ticketPrice || !maxTickets) {
-    return res.status(400).json({ message: "All fields are required." });
-  }
-  if (typeof ticketPrice !== "number" || typeof maxTickets !== "number") {
-    return res
-      .status(400)
-      .json({ message: "ticketPrice and maxTickets must be numbers." });
-  }
 
+
+const upload = multer({ dest: 'uploads/' });
+
+router.post('/create-event', upload.fields([{ name: 'banner' }, { name: 'logo' }]), (req, res) => {
   try {
-    const event = new Event({
+    const { name, description, date, location, ticketPrice, maxTickets } = req.body;
+    const banner = req.files.banner ? req.files.banner[0] : null;
+    const logo = req.files.logo ? req.files.logo[0] : null;
+
+    // Save event details and file paths (or upload to cloud storage)
+
+    // Assuming you save the paths to the database
+    const event = {
       name,
       description,
       date,
       location,
       ticketPrice,
       maxTickets,
-      organizer: req.user.id,
-    });
+      banner: banner ? banner.path : null,
+      logo: logo ? logo.path : null,
+    };
 
-    await event.save();
+    // Save `event` to your database here...
 
-    return res.status(201).json({ message: "Event created successfully", event });
+    return res.status(200).json({ message: 'Event created successfully', event });
   } catch (err) {
-    return res.status(500).json({ message: "Server error", error: err.message });
+    console.error(err);
+    return res.status(500).json({ message: 'Error creating event' });
   }
 });
+
 
 // // , date,location
 // router.post("/create-event", authenticateToken, async (req, res) => {
