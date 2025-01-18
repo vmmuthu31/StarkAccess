@@ -20,11 +20,15 @@ const TwoCards = (props: Props) => {
           <div className=" h-full w-full rounded-[20px] z-10 p-3 space-y-1 md:space-y-2">
             <Image
               className="h-[32px] md:h-[52px] w-auto"
-              src={Assets[event1.logo]}
+              src={Assets[event1.logo as keyof typeof Assets]}
               alt={event1.title}
             />
-            <p className=" text-sm md:text-xl h-10 md:h-14 overflow-hidden text-ellipsis line-clamp-2">{event1.title}</p>
-            <h1 className="text-[10px] md:text-sm h-12 md:h-16 overflow-hidden text-ellipsis line-clamp-3">{event1.description}</h1>
+            <p className=" text-sm md:text-xl h-10 md:h-14 overflow-hidden text-ellipsis line-clamp-2">
+              {event1.title}
+            </p>
+            <h1 className="text-[10px] md:text-sm h-12 md:h-16 overflow-hidden text-ellipsis line-clamp-3">
+              {event1.description}
+            </h1>
             <div className="text-sm space-y-1">
               <h1 className="text-xs md:text-base flex items-center gap-1">
                 {" "}
@@ -37,8 +41,12 @@ const TwoCards = (props: Props) => {
               </h1>
               <h1 className=" text-xs md:text-base flex items-center gap-1">
                 {" "}
-                <Image className="h-3 md:h-5 w-auto" src={Assets.Time} alt="Time" />  
-                {event1.time}
+                <Image
+                  className="h-3 md:h-5 w-auto"
+                  src={Assets.Time}
+                  alt="Time"
+                />{" "}
+                 {event1.time}
               </h1>
               <h1 className="text-xs md:text-base flex items-center gap-1">
                 {" "}
@@ -62,11 +70,15 @@ const TwoCards = (props: Props) => {
           <div className=" h-full w-full rounded-[20px] z-10 p-3 space-y-1 md:space-y-2">
             <Image
               className="h-[32px] md:h-[52px] w-auto"
-              src={Assets[event2.logo]}
+              src={Assets[event2.logo as keyof typeof Assets]}
               alt={event2.title}
             />
-            <p className="text-sm md:text-xl h-10 md:h-14 overflow-hidden text-ellipsis line-clamp-2">{event2.title}</p>
-            <h1 className="text-[10px] md:text-sm h-12 md:h-16 overflow-hidden text-ellipsis line-clamp-3">{event2.description}</h1>
+            <p className="text-sm md:text-xl h-10 md:h-14 overflow-hidden text-ellipsis line-clamp-2">
+              {event2.title}
+            </p>
+            <h1 className="text-[10px] md:text-sm h-12 md:h-16 overflow-hidden text-ellipsis line-clamp-3">
+              {event2.description}
+            </h1>
             <div className="text-sm space-y-1">
               <h1 className="text-xs md:text-base flex items-center gap-1">
                 {" "}
@@ -79,8 +91,12 @@ const TwoCards = (props: Props) => {
               </h1>
               <h1 className="text-xs md:text-base flex items-center gap-1">
                 {" "}
-                <Image className="h-3 md:h-5 w-auto" src={Assets.Time} alt="Time" />  
-                {event2.time}
+                <Image
+                  className="h-3 md:h-5 w-auto"
+                  src={Assets.Time}
+                  alt="Time"
+                />{" "}
+                 {event2.time}
               </h1>
               <h1 className="text-xs md:text-base flex items-center gap-1">
                 {" "}

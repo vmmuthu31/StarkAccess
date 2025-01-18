@@ -1,33 +1,68 @@
 "use client";
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import DateTime from "./DateTime";
+import moment from "moment-timezone";
 
-// Define the type for props with the onNext callback function
+const timezones = moment.tz.names();
+
 type Props = {
+  setEventName: React.Dispatch<React.SetStateAction<string>>;
+  setEventDescription: React.Dispatch<React.SetStateAction<string>>;
+  setStartDate: React.Dispatch<React.SetStateAction<string>>;
+  setStartTime: React.Dispatch<React.SetStateAction<string>>;
+  setLocation: React.Dispatch<React.SetStateAction<string>>;
+  setTicketPrice: React.Dispatch<React.SetStateAction<number | null>>;
+  eventName: string;
+  eventDescription: string;
+  startDate: string;
+  startTime: string;
+  ticketPrice: number | null;
+  location: string;
+  maximumTickets: number | null;
+  setMaximumTickets: React.Dispatch<React.SetStateAction<number | null>>;
+  onBack: () => void;
   onNext: () => void;
 };
 
-const Page = ({ onNext }: Props) => {
+const Page = ({
+  onNext,
+  setEventName,
+  setEventDescription,
+  setStartDate,
+  setStartTime,
+  setTicketPrice,
+  setLocation,
+  eventName,
+  eventDescription,
+  startDate,
+  startTime,
+  ticketPrice,
+  location,
+}: Props) => {
   const [locationQuery, setLocationQuery] = useState("");
   const [locationSuggestions, setLocationSuggestions] = useState<any[]>([]);
+  const [selectedTimeZone, setSelectedTimeZone] = useState("Asia/Singapore");
 
-  // Function to handle location input change and fetch suggestions
-  const handleLocationChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
-    setLocationQuery(query);
+  // Handle location input change and fetch suggestions
 
-    if (query.length > 2) {
-      const url = `https://nominatim.openstreetmap.org/search?q=${query}&format=json`;
-      const response = await fetch(url);
-      const data = await response.json();
-      setLocationSuggestions(data);
-    } else {
-      setLocationSuggestions([]);
-    }
+  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLocation(e.target.value);
+  };
+  const handleEventName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEventName(e.target.value);
+  };
+  const handleEventDesc = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setEventDescription(e.target.value);
+  };
+  const handleTicketPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTicketPrice(Number(e.target.value));
+  };
+  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStartTime(e.target.value);
+  };
+  const handleDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStartDate(e.target.value);
   };
 
-  // Handle location selection
   const handleLocationSelect = (location: any) => {
     setLocationQuery(location.display_name);
     setLocationSuggestions([]);
@@ -47,95 +82,162 @@ const Page = ({ onNext }: Props) => {
             Customization & Media
           </p>
         </div>
-        <div className="">
-          <div className="flex space-x-10">
-            <div className="w-[430px] h-[278px] space-y-3">
-              <div className="space-y-1">
-                <p className="text-lg">Event Name</p>
-                <input
-                  type="text"
-                  placeholder="Enter the name of the event (max 100 characters)."
-                  className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
-                />
-              </div>
-              <div className="space-y-1">
-                <p className="text-lg">Event Description</p>
-                <textarea
-                  placeholder="Describe your event in detail (max 500 characters)."
-                  className="w-full h-[150px] text-start p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
-                />
-              </div>
+        <div className="flex space-x-10">
+          <div className="w-[430px] h-[278px] space-y-3">
+            <div className="space-y-1">
+              <p className="text-lg">Event Name</p>
+              <input
+                type="text"
+                placeholder="Enter the name of the event (max 100 characters)."
+                value={eventName} // Bind the state variable here
+                onChange={handleEventName}
+                className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
+              />
             </div>
-
-            <div className="w-[430px] h-[278px] space-y-6">
-              <div className="space-y-1">
-                <p className="text-lg">Location/Virtual Platform</p>
-                <div>
-                  <label className="inline-flex items-center">
-                    <input
-                      type="radio"
-                      name="option"
-                      value="option1"
-                      className="form-radio text-[#4390F2]"
-                    />
-                    <span className="ml-2">If in-person</span>
-                  </label>
-                  <label className="inline-flex items-center ml-4">
-                    <input
-                      type="radio"
-                      name="option"
-                      value="option2"
-                      className="form-radio text-[#4390F2]"
-                    />
-                    <span className="ml-2">If virtual</span>
-                  </label>
-                </div>
-
-                {/* Location Input with Autocomplete */}
-                <input
-                  type="text"
-                  value={locationQuery}
-                  onChange={handleLocationChange}
-                  placeholder="Add location"
-                  className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
-                />
-
-                {/* Location Suggestions */}
-                {locationSuggestions.length > 0 && (
-                  <ul className="absolute bg-white shadow-md rounded-lg w-full mt-1">
-                    {locationSuggestions.map((suggestion, index) => (
-                      <li
-                        key={index}
-                        onClick={() => handleLocationSelect(suggestion)}
-                        className="p-2 cursor-pointer hover:bg-gray-200"
-                      >
-                        {suggestion.display_name}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-
-              <div className="space-y-1">
-                <p className="text-lg">Event date & time</p>
-                <DateTime />
-              </div>
+            <div className="space-y-1">
+              <p className="text-lg">Event Description</p>
+              <textarea
+                placeholder="Describe your event in detail (max 500 characters)."
+                value={eventDescription} // Bind the state variable here
+                onChange={handleEventDesc}
+                className="w-full h-[150px] text-start p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
+              />
+            </div>
+            <div className="space-y-1">
+              <p className="text-lg">Ticket Price</p>
+              <input
+                type="number"
+                placeholder="Enter price"
+                value={ticketPrice || ""} // Bind the state variable here
+                onChange={handleTicketPrice}
+                className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
+              />
             </div>
           </div>
-          <div className="flex relative justify-center gap-4 text-xs md:text-base pt-6">
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              className="text-[#3581F1] gap-1 bg-white p-2 px-5 flex items-center border-2 border-[#78ABFC] rounded-[10px]"
-            >
-              Cancel
-            </motion.button>
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={onNext} // Call the onNext function here
-              className="text-white bg-[#4390F2] w-fit p-2 px-5 flex justify-center items-center border-[3px] border-[#78ABFC] rounded-[10px]"
-            >
-              Next
-            </motion.button>
+
+          <div className="w-[430px] h-[278px] space-y-6">
+            <div className="space-y-1">
+              <p className="text-lg">Location/Virtual Platform</p>
+              <div>
+                <label className="inline-flex items-center">
+                  <input
+                    type="radio"
+                    name="option"
+                    value="option1"
+                    className="form-radio text-[#4390F2]"
+                  />
+                  <span className="ml-2">If in-person</span>
+                </label>
+                <label className="inline-flex items-center ml-4">
+                  <input
+                    type="radio"
+                    name="option"
+                    value="option2"
+                    className="form-radio text-[#4390F2]"
+                  />
+                  <span className="ml-2">If virtual</span>
+                </label>
+              </div>
+
+              <input
+                type="text"
+                value={location}
+                onChange={handleLocationChange}
+                placeholder="Add location"
+                className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
+              />
+              {locationSuggestions.length > 0 && (
+                <ul className="absolute bg-white shadow-md rounded-lg w-full mt-1">
+                  {locationSuggestions.map((suggestion, index) => (
+                    <li
+                      key={index}
+                      onClick={() => handleLocationSelect(suggestion)}
+                      className="p-2 cursor-pointer hover:bg-gray-200"
+                    >
+                      {suggestion.display_name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <div className="space-y-1">
+              <p className="text-lg">Event Date & Time</p>
+              <div className="flex space-x-4">
+                <div className="space-y-1 w-[180px]">
+                  <label htmlFor="start-date" className="text-base">
+                    Start Date
+                  </label>
+                  <input
+                    type="date"
+                    id="start-date"
+                    value={startTime}
+                    onChange={handleTimeChange}
+                    className="w-full h-[40px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
+                  />
+                </div>
+                <div className="space-y-1 w-[180px]">
+                  <label htmlFor="end-date" className="text-base">
+                    End Date
+                  </label>
+                  <input
+                    type="date"
+                    id="end-date"
+                    className="w-full h-[40px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
+                  />
+                </div>
+              </div>
+
+              <div className="flex space-x-4">
+                <div className="space-y-1 w-[180px]">
+                  <label htmlFor="start-time" className="text-base">
+                    Start Time
+                  </label>
+                  <input
+                    type="time"
+                    id="start-time"
+                    value={startDate}
+                    onChange={handleDate}
+                    className="w-full h-[40px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
+                  />
+                </div>
+                <div className="space-y-1 w-[180px]">
+                  <label htmlFor="end-time" className="text-base">
+                    End Time
+                  </label>
+                  <input
+                    type="time"
+                    id="end-time"
+                    className="w-full h-[40px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label htmlFor="timezone" className="text-base">
+                  Timezone
+                </label>
+                <select
+                  id="timezone"
+                  className="w-full h-[40px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
+                >
+                  {timezones.map((timezone, index) => (
+                    <option key={index} value={timezone}>
+                      {timezone}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <div
+                onClick={onNext}
+                className="bg-[#4390F2] text-white p-2 rounded-[10px] cursor-pointer"
+              >
+                Next
+              </div>
+            </div>
           </div>
         </div>
       </div>

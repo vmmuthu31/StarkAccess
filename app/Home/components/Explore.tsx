@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import EventCard from "./EventCard";
 import ExploreEventsData from "@/app/utils/ExploreEvents.json";
@@ -6,7 +6,7 @@ import ExploreEventsData from "@/app/utils/ExploreEvents.json";
 type Props = {};
 
 const Explore = (props: Props) => {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<any[]>([]);
 
   useEffect(() => {
     // Fetch or directly set data from the imported JSON

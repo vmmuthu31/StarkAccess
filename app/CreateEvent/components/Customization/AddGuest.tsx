@@ -3,11 +3,11 @@ import React, { useState } from "react";
 type Props = {};
 
 const AddGuest = (props: Props) => {
-  const [emails, setEmails] = useState([]);
+  const [emails, setEmails] = useState<string[]>([]);
   const [currentEmail, setCurrentEmail] = useState("");
 
   // Handle key press (e.g., adding an email when pressing Enter or comma)
-  const Handlekeydown = (e) => {
+  const Handlekeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" || e.key === "," || e.key === " ") {
       e.preventDefault();
       if (currentEmail.trim() && Isvalidemail(currentEmail.trim())) {
@@ -18,17 +18,17 @@ const AddGuest = (props: Props) => {
   };
 
   // Validate the email format
-  const Isvalidemail = (email) => {
+  const Isvalidemail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
   // Handle input change
-  const Handlemailchange = (e) => {
+  const Handlemailchange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentEmail(e.target.value);
   };
 
   // Remove an email from the list
-  const removeEmail = (index) => {
+  const removeEmail = (index: number) => {
     setEmails(emails.filter((_, i) => i !== index));
   };
 

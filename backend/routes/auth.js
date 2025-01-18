@@ -9,7 +9,7 @@ const router = express.Router();
 require("dotenv").config();
 
 const generateToken = (user) => {
-  return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
+  return jwt.sign({ id: user._id, role: user.role },process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
 };
@@ -106,7 +106,28 @@ router.post("/change-password", authenticateToken, async (req, res) => {
     return res.status(500).json({ message: "Server error", error: err.message });
   }
 });
+router.get("/me", authenticateToken, async (req, res) => {
+  try {
+    // Find the user by ID from the token
+    const user = await User.findById(req.user.id).select("-password"); // Exclude password field
 
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      message: "User retrieved successfully",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role, // Assuming role is stored in the User model
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
 
 router.post("/logout", (req, res) => {
   res.clearCookie("token");
