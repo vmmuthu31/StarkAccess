@@ -2,10 +2,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import EventCard from "../Home/components/EventCard"; // Import EventCard component
-import Assets from "../components/Assets/Assets"; // Import assets for background and images
-import Image from "next/image";
 import Footer from "../components/Footer"; // Import Footer
 import Header from "../components/Header"; // Import Header
+import { BACKEND_URL } from "@/backend/constants";
 
 type Event = {
   _id: string;
@@ -33,11 +32,14 @@ const Page = () => {
           throw new Error("No token found. Please log in.");
         }
 
-        const response = await axios.get("http://localhost:8080/api/Events/all-events", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          `${BACKEND_URL}/api/Events/all-events`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
-        const userData = await axios.get("http://localhost:8080/api/auth/me", {
+        const userData = await axios.get(`${BACKEND_URL}/api/auth/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -58,7 +60,8 @@ const Page = () => {
   };
 
   if (loading) return <div className="text-center py-4">Loading events...</div>;
-  if (error) return <div className="text-center text-red-500 py-4">{error}</div>;
+  if (error)
+    return <div className="text-center text-red-500 py-4">{error}</div>;
 
   return (
     <div className="min-h-screen text-white custom-cursor">
@@ -103,7 +106,7 @@ const Page = () => {
         </div>
 
         {/* Footer */}
-        <Footer  />
+        <Footer />
       </div>
     </div>
   );

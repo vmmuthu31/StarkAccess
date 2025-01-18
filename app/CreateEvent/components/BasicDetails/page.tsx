@@ -1,60 +1,56 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
 import moment from "moment-timezone";
-import Image from "next/image";
-import Assets from "@/app/components/Assets/Assets";
 
-// List of timezones for the dropdown
 const timezones = moment.tz.names();
 
 type Props = {
-  onNext: () => void;
   setEventName: React.Dispatch<React.SetStateAction<string>>;
   setEventDescription: React.Dispatch<React.SetStateAction<string>>;
   setStartDate: React.Dispatch<React.SetStateAction<string>>;
   setStartTime: React.Dispatch<React.SetStateAction<string>>;
   setLocation: React.Dispatch<React.SetStateAction<string>>;
-  setTicketPrice: React.Dispatch<React.SetStateAction<number>>;
+  setTicketPrice: React.Dispatch<React.SetStateAction<number | null>>;
   eventName: string;
   eventDescription: string;
   startDate: string;
   startTime: string;
-  ticketPrice: number;
-  location :string;
+  ticketPrice: number | null;
+  location: string;
+  maximumTickets: number | null;
+  setMaximumTickets: React.Dispatch<React.SetStateAction<number | null>>;
+  onBack: () => void;
+  onNext: () => void;
 };
 
-          
-  const Page = ({
-    onNext,
-    setEventName,
-    setEventDescription,
-    setStartDate,
-    setStartTime,
-    setTicketPrice,
-    setLocation,
-    eventName,
-    eventDescription,
-    startDate,
-    startTime,
-    ticketPrice,
-    location,
-  }: Props) => {
+const Page = ({
+  onNext,
+  setEventName,
+  setEventDescription,
+  setStartDate,
+  setStartTime,
+  setTicketPrice,
+  setLocation,
+  eventName,
+  eventDescription,
+  startDate,
+  startTime,
+  ticketPrice,
+  location,
+}: Props) => {
   const [locationQuery, setLocationQuery] = useState("");
   const [locationSuggestions, setLocationSuggestions] = useState<any[]>([]);
   const [selectedTimeZone, setSelectedTimeZone] = useState("Asia/Singapore");
-  
-  
-  
+
   // Handle location input change and fetch suggestions
-  
+
   const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocation(e.target.value);
   };
   const handleEventName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEventName(e.target.value);
   };
-  const handleEventDesc = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEventDesc = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEventDescription(e.target.value);
   };
   const handleTicketPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,34 +62,11 @@ type Props = {
   const handleDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStartDate(e.target.value);
   };
-  
-  // Handle location selection
-  // const handleLocationSelect = (location: any ,) => {
-    //   setLocationQuery(location.display_name);
-    //   setLocationSuggestions([]);
-    
-    
-    // };
-    // const handleLocationChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    //   const query = e.target.value;
-    //   setLocationQuery(query);
-  
-    //   if (query.length > 2) {
-    //     const url = `https://nominatim.openstreetmap.org/search?q=${query}&format=json`;
-    //     const response = await fetch(url);
-    //     const data = await response.json();
-    //     setLocationSuggestions(data);
-    //   } else {
-    //     setLocationSuggestions([]);
-    //   }
-    // };
-    
-  // Refs to detect outside clicks
-  const startDateRef = useRef<HTMLDivElement>(null);
-  const endDateRef = useRef<HTMLDivElement>(null);
-  const startTimeRef = useRef<HTMLDivElement>(null);
-  const endTimeRef = useRef<HTMLDivElement>(null);
 
+  const handleLocationSelect = (location: any) => {
+    setLocationQuery(location.display_name);
+    setLocationSuggestions([]);
+  };
 
   return (
     <div>
@@ -115,11 +88,11 @@ type Props = {
               <p className="text-lg">Event Name</p>
               <input
                 type="text"
-                 placeholder="Enter the name of the event (max 100 characters)."
-                 value={eventName} // Bind the state variable here
-                 onChange={handleEventName}
-                  className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
-                 />
+                placeholder="Enter the name of the event (max 100 characters)."
+                value={eventName} // Bind the state variable here
+                onChange={handleEventName}
+                className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
+              />
             </div>
             <div className="space-y-1">
               <p className="text-lg">Event Description</p>
@@ -135,7 +108,7 @@ type Props = {
               <input
                 type="number"
                 placeholder="Enter price"
-                value={ticketPrice} // Bind the state variable here
+                value={ticketPrice || ""} // Bind the state variable here
                 onChange={handleTicketPrice}
                 className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
               />
@@ -146,33 +119,33 @@ type Props = {
             <div className="space-y-1">
               <p className="text-lg">Location/Virtual Platform</p>
               <div>
-                  <label className="inline-flex items-center">
-                    <input
-                      type="radio"
-                      name="option"
-                      value="option1"
-                      className="form-radio text-[#4390F2]"
-                    />
-                    <span className="ml-2">If in-person</span>
-                  </label>
-                  <label className="inline-flex items-center ml-4">
-                    <input
-                      type="radio"
-                      name="option"
-                      value="option2"
-                      className="form-radio text-[#4390F2]"
-                    />
-                    <span className="ml-2">If virtual</span>
-                  </label>
-                </div>
+                <label className="inline-flex items-center">
+                  <input
+                    type="radio"
+                    name="option"
+                    value="option1"
+                    className="form-radio text-[#4390F2]"
+                  />
+                  <span className="ml-2">If in-person</span>
+                </label>
+                <label className="inline-flex items-center ml-4">
+                  <input
+                    type="radio"
+                    name="option"
+                    value="option2"
+                    className="form-radio text-[#4390F2]"
+                  />
+                  <span className="ml-2">If virtual</span>
+                </label>
+              </div>
 
-                <input
-                  type="text"
-                  value={location}
-                  onChange={handleLocationChange}
-                  placeholder="Add location"
-                  className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
-                />
+              <input
+                type="text"
+                value={location}
+                onChange={handleLocationChange}
+                placeholder="Add location"
+                className="w-full h-[53px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
+              />
               {locationSuggestions.length > 0 && (
                 <ul className="absolute bg-white shadow-md rounded-lg w-full mt-1">
                   {locationSuggestions.map((suggestion, index) => (
@@ -192,7 +165,9 @@ type Props = {
               <p className="text-lg">Event Date & Time</p>
               <div className="flex space-x-4">
                 <div className="space-y-1 w-[180px]">
-                  <label htmlFor="start-date" className="text-base">Start Date</label>
+                  <label htmlFor="start-date" className="text-base">
+                    Start Date
+                  </label>
                   <input
                     type="date"
                     id="start-date"
@@ -202,11 +177,12 @@ type Props = {
                   />
                 </div>
                 <div className="space-y-1 w-[180px]">
-                  <label htmlFor="end-date" className="text-base">End Date</label>
+                  <label htmlFor="end-date" className="text-base">
+                    End Date
+                  </label>
                   <input
                     type="date"
                     id="end-date"
-                   
                     className="w-full h-[40px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
                   />
                 </div>
@@ -214,7 +190,9 @@ type Props = {
 
               <div className="flex space-x-4">
                 <div className="space-y-1 w-[180px]">
-                  <label htmlFor="start-time" className="text-base">Start Time</label>
+                  <label htmlFor="start-time" className="text-base">
+                    Start Time
+                  </label>
                   <input
                     type="time"
                     id="start-time"
@@ -224,21 +202,23 @@ type Props = {
                   />
                 </div>
                 <div className="space-y-1 w-[180px]">
-                  <label htmlFor="end-time" className="text-base">End Time</label>
+                  <label htmlFor="end-time" className="text-base">
+                    End Time
+                  </label>
                   <input
                     type="time"
                     id="end-time"
-                   
                     className="w-full h-[40px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label htmlFor="timezone" className="text-base">Timezone</label>
+                <label htmlFor="timezone" className="text-base">
+                  Timezone
+                </label>
                 <select
                   id="timezone"
-              
                   className="w-full h-[40px] p-2 px-4 rounded-[10px] bg-[#DAE7FC] border border-[#4390F2]/40"
                 >
                   {timezones.map((timezone, index) => (
@@ -252,13 +232,12 @@ type Props = {
 
             <div className="space-y-1">
               <div
-        
                 onClick={onNext}
                 className="bg-[#4390F2] text-white p-2 rounded-[10px] cursor-pointer"
               >
                 Next
               </div>
-            </div>  
+            </div>
           </div>
         </div>
       </div>

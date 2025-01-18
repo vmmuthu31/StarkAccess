@@ -5,7 +5,7 @@ import Image from "next/image";
 import Assets from "../components/Assets/Assets";
 import { motion } from "framer-motion";
 import axios from "axios";
-
+import { BACKEND_URL } from "@/backend/constants";
 type Props = {};
 
 const Page = (props: Props) => {
@@ -15,7 +15,7 @@ const Page = (props: Props) => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/login", {
+      const response = await axios.post(`${BACKEND_URL}/api/auth/login`, {
         email,
         password,
       });
@@ -29,7 +29,9 @@ const Page = (props: Props) => {
       // Redirect to dashboard or home page
       window.location.href = "/Home"; // Update with your actual route
     } catch (err: any) {
-      setErrorMessage(err.response?.data?.message || "Login failed. Try again.");
+      setErrorMessage(
+        err.response?.data?.message || "Login failed. Try again."
+      );
     }
   };
 

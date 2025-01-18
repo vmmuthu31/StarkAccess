@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { motion } from "framer-motion";
+import { BACKEND_URL } from "@/backend/constants";
 
 type Props = {
   onBack: () => void;
@@ -10,8 +11,17 @@ type Props = {
   eventDescription: string;
   startDate: string;
   location: string;
-  ticketPrice: number;
-  maximumTickets: number;
+  setEventName: React.Dispatch<React.SetStateAction<string>>;
+  setEventDescription: React.Dispatch<React.SetStateAction<string>>;
+  setStartDate: React.Dispatch<React.SetStateAction<string>>;
+  setLocation: React.Dispatch<React.SetStateAction<string>>;
+  setTicketPrice: React.Dispatch<React.SetStateAction<number | null>>;
+  setMaximumTickets: React.Dispatch<React.SetStateAction<number | null>>;
+  startTime: string;
+  setStartTime: React.Dispatch<React.SetStateAction<string>>;
+  onNext: () => void;
+  ticketPrice: number | null;
+  maximumTickets: number | null;
 };
 
 const Page = ({
@@ -69,37 +79,45 @@ const Page = ({
     setLoading(true);
     setError(null);
     setSuccess(null);
-  
+
     const formData = new FormData();
-    formData.append('name', eventName);
-    formData.append('description', eventDescription);
-    formData.append('date', startDate);
-    formData.append('location', location);
-    formData.append('ticketPrice', ticketPrice.toString());
-    formData.append('maxTickets', maximumTickets.toString());
-    
+    formData.append("name", eventName);
+    formData.append("description", eventDescription);
+    formData.append("date", startDate);
+    formData.append("location", location);
+    formData.append("ticketPrice", ticketPrice?.toString() || "");
+    formData.append("maxTickets", maximumTickets?.toString() || "");
+
     // Add the banner and logo files to the form data
     if (bannerFileName) {
-      const bannerFile = document.getElementById("banner-upload")?.files?.[0];
-      if (bannerFile) formData.append('banner', bannerFile);
+      const bannerFile = document.getElementById(
+        "banner-upload"
+      ) as HTMLInputElement;
+      if (bannerFile && bannerFile.files && bannerFile.files.length > 0) {
+        formData.append("banner", bannerFile.files[0]);
+      }
     }
-  
+
     if (logoFileName) {
-      const logoFile = document.getElementById("logo-upload")?.files?.[0];
-      if (logoFile) formData.append('logo', logoFile);
+      const logoFile = document.getElementById(
+        "logo-upload"
+      ) as HTMLInputElement;
+      if (logoFile && logoFile.files && logoFile.files.length > 0) {
+        formData.append("logo", logoFile.files[0]);
+      }
     }
-  
+
     try {
-      const response = await fetch("http://localhost:8080/api/Events/create-event", {
+      const response = await fetch(`${BACKEND_URL}/api/Events/create-event`, {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: formData,
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
         setSuccess("Event created successfully!");
       } else {
@@ -112,7 +130,6 @@ const Page = ({
       setLoading(false);
     }
   };
-  
 
   return (
     <div>

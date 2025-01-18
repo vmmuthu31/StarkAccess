@@ -1,21 +1,32 @@
-"use client"; // Ensure this is at the top of your file
+"use client"; // Ensure the file is marked as a client component
 
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "@/backend/constants";
+import Image from "next/image";
+
+interface Event {
+  _id: string;
+  name: string;
+  description: string;
+  date: string;
+  location: string;
+  image: string;
+}
 
 const EventRegistration = () => {
-  const [event, setEvent] = useState(null);
-  const router = useRouter();
-  const { eventId } = router.query;
+  const [event, setEvent] = useState<Event | null>(null);
+  const searchParams = new URLSearchParams(window.location.search);
+  const eventId = searchParams.get("eventId");
 
   useEffect(() => {
-    // Wait for eventId to be available before fetching data
     if (eventId) {
       const fetchEventDetails = async () => {
         try {
-          const response = await axios.get(`http://localhost:8080/api/Events/event/${eventId}`);
-          setEvent(response.data);
+          const response = await axios.get(
+            `${BACKEND_URL}/api/Events/event/${eventId}`
+          );
+          setEvent(response.data); // Set the event data
         } catch (error) {
           console.error("Error fetching event details:", error);
         }
@@ -23,23 +34,23 @@ const EventRegistration = () => {
 
       fetchEventDetails();
     }
-  }, [eventId]); // Depend on eventId to trigger the effect when it changes
+  }, [eventId]);
 
   if (!eventId) {
-    return <div>Loading event...</div>; // Return early if eventId is not available
+    return <div>Loading event...</div>; // Early return if eventId is missing
   }
 
   if (!event) {
-    return <div>Loading event details...</div>; // Loading state while event data is being fetched
+    return <div>Loading event details...</div>; // Show loading state until event data is fetched
   }
 
   return (
     <div>
-      <h1>{event.title}</h1>
+      <h1>{event.name}</h1>
       <p>{event.description}</p>
       <p>{event.date}</p>
       <p>{event.location}</p>
-      <img src={event.image} alt={event.title} />
+      <Image src={event.image} alt={event.name} width={100} height={100} />
     </div>
   );
 };

@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { Question } from "./Types"; // Assuming you have a Question type in your Types file
 
 type SelectionProps = {
-  setQuestions: (questions: Question[]) => void;
+  setQuestions: React.Dispatch<React.SetStateAction<Question[]>>;
   editingQuestion: Question | null;
   setEditingQuestion: (question: Question | null) => void;
   questions: Question[];
@@ -28,11 +28,7 @@ const Selection = ({
     required: false,
     question: "",
     options: [],
-    github: "",
-    linkedin: "",
-    twitter: "",
-    telegram: "",
-    discord: "",
+    socialId: "",
   });
 
   useEffect(() => {
@@ -44,13 +40,13 @@ const Selection = ({
   const addQuestionToReview = () => {
     if (editingQuestion) {
       // Update existing question
-      setQuestions((prevQuestions) =>
+      setQuestions((prevQuestions: Question[]) =>
         prevQuestions.map((q) => (q.id === question.id ? question : q))
       );
       setEditingQuestion(null); // Clear editing state
     } else {
       // Add new question
-      setQuestions((prevQuestions) => [...prevQuestions, question]);
+      setQuestions((prevQuestions: Question[]) => [...prevQuestions, question]);
       setCurrentQuestionId(currentQuestionId + 1);
     }
     resetQuestion(); // Reset fields for next question
@@ -63,11 +59,7 @@ const Selection = ({
       required: false,
       question: "",
       options: [],
-      github: "",
-      linkedin: "",
-      twitter: "",
-      telegram: "",
-      discord: "",
+      socialId: "",
     });
   };
 
@@ -85,7 +77,7 @@ const Selection = ({
   const handleOptionChange = (option: string) => {
     setQuestion((prev) => ({
       ...prev,
-      options: [...prev.options, option],
+      options: [...(prev.options || []), option],
     }));
   };
 
@@ -158,49 +150,54 @@ const Selection = ({
           </div>
         )}
 
-{question.type === "option" && (
-  <div>
-    <p>Options</p>
-    <div className="flex items-center mb-2 border border-gray-300 rounded-lg p-2 bg-[#f0f4fa]">
-      {/* Render the capsules inside the input area */}
-      <div className="flex flex-wrap gap-2">
-        {question.options.map((option, idx) => (
-          <div
-            key={idx}
-            className="bg-[#3B82F6] text-white rounded-full px-3 py-1 text-sm flex items-center"
-          >
-            {option}
-            <button
-              className="ml-2 text-white focus:outline-none text-2xl" // Increased size for the 'x' button
-              onClick={() => {
-                const updatedOptions = question.options.filter((_, index) => index !== idx);
-                setQuestion((prev) => ({ ...prev, options: updatedOptions }));
-              }}
-            >
-              &times;
-            </button>
+        {question.type === "option" && (
+          <div>
+            <p>Options</p>
+            <div className="flex items-center mb-2 border border-gray-300 rounded-lg p-2 bg-[#f0f4fa]">
+              {/* Render the capsules inside the input area */}
+              <div className="flex flex-wrap gap-2">
+                {(question.options || []).map((option, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-[#3B82F6] text-white rounded-full px-3 py-1 text-sm flex items-center"
+                  >
+                    {option}
+                    <button
+                      className="ml-2 text-white focus:outline-none text-2xl" // Increased size for the 'x' button
+                      onClick={() => {
+                        const updatedOptions = (question.options || []).filter(
+                          (_, index) => index !== idx
+                        );
+                        setQuestion((prev) => ({
+                          ...prev,
+                          options: updatedOptions,
+                        }));
+                      }}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+              </div>
+              {/* Input field for adding new options */}
+              <input
+                type="text"
+                placeholder="Add an option and press enter or tab"
+                className="flex-1 h-[53px] p-2 bg-transparent border-none outline-none"
+                onKeyDown={(e) => {
+                  if (
+                    (e.key === "Enter" || e.key === "Tab") &&
+                    e.currentTarget.value.trim() !== ""
+                  ) {
+                    e.preventDefault(); // Prevent default tab behavior
+                    handleOptionChange(e.currentTarget.value);
+                    e.currentTarget.value = ""; // Clear input
+                  }
+                }}
+              />
+            </div>
           </div>
-        ))}
-      </div>
-      {/* Input field for adding new options */}
-      <input
-        type="text"
-        placeholder="Add an option and press enter or tab"
-        className="flex-1 h-[53px] p-2 bg-transparent border-none outline-none"
-        onKeyDown={(e) => {
-          if ((e.key === "Enter" || e.key === "Tab") && e.currentTarget.value.trim() !== "") {
-            e.preventDefault(); // Prevent default tab behavior
-            handleOptionChange(e.currentTarget.value);
-            e.currentTarget.value = ""; // Clear input
-          }
-        }}
-      />
-    </div>
-  </div>
-)}
-
-
-
+        )}
 
         {question.type === "checkbox" && (
           <div className="flex items-center gap-2">
@@ -215,22 +212,31 @@ const Selection = ({
 
             {/* Social media platform checkboxes */}
             <div className="space-y-2">
-              {["GitHub", "LinkedIn", "Twitter", "Telegram", "Discord"].map((platform) => (
-                <div key={platform} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id={platform}
-                    checked={question.options.includes(platform)}
-                    onChange={(e) => {
-                      const newOptions = e.target.checked
-                        ? [...question.options, platform]
-                        : question.options.filter((opt) => opt !== platform);
-                      setQuestion((prev) => ({ ...prev, options: newOptions }));
-                    }}
-                  />
-                  <label htmlFor={platform} className="text-lg">{platform}</label>
-                </div>
-              ))}
+              {["GitHub", "LinkedIn", "Twitter", "Telegram", "Discord"].map(
+                (platform) => (
+                  <div key={platform} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id={platform}
+                      checked={question.options?.includes(platform)}
+                      onChange={(e) => {
+                        const newOptions = e.target.checked
+                          ? [...(question.options || []), platform]
+                          : (question.options || []).filter(
+                              (opt) => opt !== platform
+                            );
+                        setQuestion((prev) => ({
+                          ...prev,
+                          options: newOptions,
+                        }));
+                      }}
+                    />
+                    <label htmlFor={platform} className="text-lg">
+                      {platform}
+                    </label>
+                  </div>
+                )
+              )}
             </div>
           </div>
         )}

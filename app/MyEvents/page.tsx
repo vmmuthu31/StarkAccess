@@ -3,9 +3,11 @@ import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import EventCard from "../Home/components/EventCard"; // Import the EventCard component
+import { BACKEND_URL } from "@/backend/constants";
 
 type Event = {
-  title: string;
+  _id: string;
+  name: string;
   description: string;
   date: string;
   time: string;
@@ -30,7 +32,7 @@ const Page = () => {
           return;
         }
 
-        const response = await fetch("http://localhost:8080/api/Events/my-events", {
+        const response = await fetch(`${BACKEND_URL} /api/Events/my-events`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -76,7 +78,6 @@ const Page = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {events.map((event, index) => (
                   <EventCard key={index} event={event} />
-                 
                 ))}
               </div>
             )}

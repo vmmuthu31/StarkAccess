@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, Dispatch, SetStateAction } from "react";
 import Header from "../components/Header";
 import BasicDetails from "../CreateEvent/components/BasicDetails/page";
 import Registration from "../CreateEvent/components/Registration/page";
@@ -9,7 +9,9 @@ type Props = {};
 
 const Page = (props: Props) => {
   // State for managing steps
-  const [currentStep, setCurrentStep] = useState<"basicDetails" | "registration" | "customization">("basicDetails");
+  const [currentStep, setCurrentStep] = useState<
+    "basicDetails" | "registration" | "customization"
+  >("basicDetails");
 
   // States for event details
   const [eventName, setEventName] = useState("");
@@ -18,7 +20,7 @@ const Page = (props: Props) => {
   const [startTime, setStartTime] = useState("");
   const [ticketPrice, setTicketPrice] = useState<number | null>(null);
   const [maximumTickets, setMaximumTickets] = useState<number | null>(null);
- 
+
   const [location, setLocation] = useState("");
   // Navigation handlers
   const Handlenext = () => {
@@ -64,25 +66,25 @@ const Page = (props: Props) => {
       case "registration":
         return (
           <Registration
-          eventName={eventName}
-          setEventName={setEventName}
-          eventDescription={eventDescription}
-          setEventDescription={setEventDescription}
-          startDate={startDate}
-          setStartDate={setStartDate}
-          startTime={startTime}
-          setStartTime={setStartTime}
-         
-          ticketPrice={ticketPrice}
-          setTicketPrice={setTicketPrice}
-          maximumTickets={maximumTickets}
-          setMaximumTickets={setMaximumTickets}
-          onBack={Handleback}
-          onNext={Handlenext}
+            eventName={eventName}
+            setEventName={setEventName}
+            eventDescription={eventDescription}
+            setEventDescription={setEventDescription}
+            startDate={startDate}
+            setStartDate={setStartDate}
+            startTime={startTime}
+            setStartTime={setStartTime}
+            ticketPrice={ticketPrice}
+            setTicketPrice={setTicketPrice}
+            maximumTickets={maximumTickets}
+            setMaximumTickets={setMaximumTickets}
+            onBack={Handleback}
+            onNext={Handlenext}
           />
         );
       case "customization":
-        return <Customization 
+        return (
+          <Customization
             eventName={eventName}
             setEventName={setEventName}
             eventDescription={eventDescription}
@@ -99,7 +101,8 @@ const Page = (props: Props) => {
             setMaximumTickets={setMaximumTickets}
             onBack={Handleback}
             onNext={Handlenext}
-        />;
+          />
+        );
       default:
         return null;
     }
