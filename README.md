@@ -2,19 +2,19 @@
 
 ![Frame 1321314818](https://github.com/user-attachments/assets/ea06274f-b42d-40a3-a98c-1fa64b52a444)
 
-
-
 StarkAccess is a decentralized event management and ticketing platform powered by Starknet and zkSNARKs. It allows users to purchase event tickets as NFTs on-chain, ensuring privacy, security, and transparency. Organizers can create events, add co-organizers, and manage ticket sales, while maintaining a high level of privacy for all participants through zero-knowledge proofs.
 
 ## Key Features
 
 ### For Users
+
 - ✅ Purchase event tickets as NFTs using Starknet
 - ✅ Enjoy low gas fees and seamless on-chain transactions
 - ✅ Tickets are privacy-preserving, leveraging zkSNARKs for secure and verifiable ownership
 - ✅ Easily check in at events with organizer verification
 
 ### For Organizers
+
 - ⭐ Create and manage events with decentralized ticketing
 - ⭐ Add co-organizers to help with event management
 - ⭐ Generate revenue by selling tickets as NFTs on-chain
@@ -22,6 +22,7 @@ StarkAccess is a decentralized event management and ticketing platform powered b
 - ⭐ Check-in attendees
 
 ### For Admins and Super Admins
+
 - 🛠️ Admins can oversee users, events, and tickets, with the ability to suspend or ban them if necessary
 - 🛠️ Super Admins have full platform control, including adding new admins and managing their permissions
 
@@ -42,52 +43,51 @@ The platform leverages the power of Starknet's Layer 2 scaling and zkSNARKs for 
 
 1. Clone the repository:
 
-    ```bash
-    git clone https://github.com/Starknet-Event-Ticketing-Platform
-    ```
+   ```bash
+   git clone https://github.com/Starknet-Event-Ticketing-Platform
+   ```
 
 2. Navigate to the frontend folder and install dependencies:
 
-    ```bash
-    cd frontend
-    npm install
-    ```
+   ```bash
+   cd frontend
+   npm install
+   ```
 
 3. Run the development server:
 
-    ```bash
-    npm run dev
-    ```
+   ```bash
+   npm run dev
+   ```
 
 4. Build for production:
 
-    ```bash
-    npm run build
-    ```
-
+   ```bash
+   npm run build
+   ```
 
 ### Backend (Node.js)
 
 1. Navigate to the backend folder and install dependencies:
 
-    ```bash
-    cd backend
-    npm install
-    ```
+   ```bash
+   cd backend
+   npm install
+   ```
 
 2. Set up your environment variables (e.g., `.env` file) for database and Starknet integration.
 
 3. Run the backend development server:
 
-    ```bash
-    npm run dev
-    ```
+   ```bash
+   npm run dev
+   ```
 
 4. Build the server for production:
 
-    ```bash
-    npm run build
-    ```
+   ```bash
+   npm run build
+   ```
 
 ## 🧑‍💻 Todos
 
