@@ -1,9 +1,14 @@
-import React from "react";
+"use client";
+
 import { Provider } from "react-redux";
-import { store, persistor } from "@global/store/store";
+import { store, persistor } from "@/global/store/store";
 import { PersistGate } from "redux-persist/integration/react";
 
-function ProviderWrapper({ children }: { children: React.ReactNode }) {
+export default function ClientProviders({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
@@ -12,5 +17,3 @@ function ProviderWrapper({ children }: { children: React.ReactNode }) {
     </Provider>
   );
 }
-
-export default ProviderWrapper;
