@@ -5,11 +5,16 @@ import {
   isAuthResponse,
 } from "@global/middleware/authenticateToken";
 import { isAdmin } from "@global/middleware/roleMiddleware";
+import { connectToDatabase } from "@global/lib/mongodb";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const db = await connectToDatabase();
+  if (!db) {
+    throw new Error("Database connection failed");
+  }
   try {
     const authReq = await authenticateToken(req);
     if (!isAuthResponse(authReq)) {
@@ -37,6 +42,10 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const db = await connectToDatabase();
+  if (!db) {
+    throw new Error("Database connection failed");
+  }
   try {
     const authReq = await authenticateToken(req);
     if (!isAuthResponse(authReq)) {

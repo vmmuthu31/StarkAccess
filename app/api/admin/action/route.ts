@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
   createAdminAction,
-  getAdminActions,
   getAdminActionsData,
 } from "@global/controllers/adminController";
 import { authenticateNextRequest } from "@global/middleware/authenticateToken";
 import { isSuperAdmin } from "@global/middleware/roleMiddleware";
+import { connectToDatabase } from "@global/lib/mongodb";
 
 export async function POST(req: NextRequest) {
+  const db = await connectToDatabase();
+  if (!db) {
+    throw new Error("Database connection failed");
+  }
   try {
     const authReq = await authenticateNextRequest(req);
     if (!authReq) {
@@ -41,6 +45,10 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
+  const db = await connectToDatabase();
+  if (!db) {
+    throw new Error("Database connection failed");
+  }
   try {
     const authReq = await authenticateNextRequest(req);
     if (!authReq) {

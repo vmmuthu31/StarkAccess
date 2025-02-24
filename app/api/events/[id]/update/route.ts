@@ -5,11 +5,16 @@ import {
   isAuthResponse,
 } from "@global/middleware/authenticateToken";
 import { checkEventOrganizerOrCoOrganizer } from "@global/middleware/roleMiddleware";
+import { connectToDatabase } from "@global/lib/mongodb";
 
 export async function PUT(
   req: NextRequest,
   { params }: { params: { eventId: string } }
 ) {
+  const db = await connectToDatabase();
+  if (!db) {
+    throw new Error("Database connection failed");
+  }
   try {
     const authReq = await authenticateToken(req);
     if (!isAuthResponse(authReq)) {

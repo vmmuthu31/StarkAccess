@@ -4,8 +4,13 @@ import {
   authenticateToken,
   isAuthResponse,
 } from "@global/middleware/authenticateToken";
+import { connectToDatabase } from "@global/lib/mongodb";
 
 export async function POST(req: NextRequest) {
+  const db = await connectToDatabase();
+  if (!db) {
+    throw new Error("Database connection failed");
+  }
   try {
     const authReq = await authenticateToken(req);
     if (!isAuthResponse(authReq)) {
