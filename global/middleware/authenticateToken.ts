@@ -1,37 +1,68 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { JwtPayload } from "jsonwebtoken";
+import { NextRequest, NextResponse } from "next/server";
 
 interface CustomJwtPayload extends JwtPayload {
   id: string;
   role: string;
+  name: string;
 }
 
 export interface AuthenticatedRequest extends Request {
   user?: CustomJwtPayload;
 }
 
-export const authenticateToken = (
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-): void => {
-  const authHeader = req.headers.authorization;
+export interface AuthResponse {
+  user: {
+    id: string;
+    role: string;
+    name: string;
+  };
+}
+
+export const authenticateToken = async (
+  req: NextRequest
+): Promise<AuthResponse | NextResponse> => {
+  const authHeader = req.headers.get("authorization");
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
-    res.status(401).send("Access Denied. No token provided.");
-    return;
+    return NextResponse.json(
+      { message: "Access Denied. No token provided." },
+      { status: 401 }
+    );
   }
 
-  jwt.verify(token, process.env.JWT_SECRET as string, (err, user) => {
-    if (err) {
-      res.status(403).send("Invalid or expired token.");
-      return;
-    }
-    req.user = user as CustomJwtPayload;
-    next();
+  return new Promise((resolve) => {
+    jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
+      if (err) {
+        resolve(
+          NextResponse.json(
+            { message: "Invalid or expired token." },
+            { status: 403 }
+          )
+        );
+      }
+      const user = decoded as CustomJwtPayload;
+      resolve({ user: { id: user.id, role: user.role, name: user.name } });
+    });
   });
 };
 
 export default authenticateToken;
+
+export async function authenticateNextRequest(req: NextRequest) {
+  const token = req.headers.get("authorization")?.split(" ")[1];
+  if (!token) return null;
+
+  try {
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET as string
+    ) as CustomJwtPayload;
+    return { user: { id: decoded.id, role: decoded.role, name: decoded.name } };
+  } catch (err) {
+    return null;
+  }
+}

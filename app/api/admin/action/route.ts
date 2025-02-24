@@ -1,28 +1,75 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { createAdminAction } from "@/global/controllers/adminController";
-import { authenticateToken } from "@/global/middleware/authenticateToken";
+import { NextRequest, NextResponse } from "next/server";
+import {
+  createAdminAction,
+  getAdminActions,
+  getAdminActionsData,
+} from "@/global/controllers/adminController";
+import { authenticateNextRequest } from "@/global/middleware/authenticateToken";
+import { isSuperAdmin } from "@/global/middleware/roleMiddleware";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed" });
-  }
-
+export async function POST(req: NextRequest) {
   try {
-    // Convert Express middleware to async function
-    await new Promise((resolve, reject) => {
-      authenticateToken(req as any, res as any, (error?: any) => {
-        if (error) reject(error);
-        else resolve(true);
-      });
+    const authReq = await authenticateNextRequest(req);
+    if (!authReq) {
+      return NextResponse.json(
+        { message: "Authentication failed" },
+        { status: 401 }
+      );
+    }
+
+    const body = await req.json();
+    const { action, targetId, targetType, description } = body;
+
+    const adminAction = await createAdminAction({
+      userId: authReq.user.id,
+      action,
+      targetId,
+      targetType,
+      description,
     });
 
-    await createAdminAction(req as any, res as any, () => {});
+    return NextResponse.json(
+      { message: "Admin action logged successfully", adminAction },
+      { status: 201 }
+    );
   } catch (error: any) {
-    return res
-      .status(500)
-      .json({ message: "Server error", error: error.message });
+    return NextResponse.json(
+      { message: "Server error", error: error.message },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    const authReq = await authenticateNextRequest(req);
+    if (!authReq) {
+      return NextResponse.json(
+        { message: "Authentication failed" },
+        { status: 401 }
+      );
+    }
+
+    if (!isSuperAdmin(authReq)) {
+      return NextResponse.json(
+        { message: "Access denied. SuperAdmin only." },
+        { status: 403 }
+      );
+    }
+
+    const adminActions = await getAdminActionsData();
+    if (!adminActions || adminActions.length === 0) {
+      return NextResponse.json(
+        { message: "No admin actions found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ adminActions });
+  } catch (error: any) {
+    return NextResponse.json(
+      { message: "Server error", error: error.message },
+      { status: 500 }
+    );
   }
 }

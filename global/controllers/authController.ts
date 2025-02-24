@@ -1,12 +1,7 @@
-import { Response, RequestHandler } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 import User from "../models/User";
 import { sendEmail, registrationEmailTemplate } from "../utils/Mailer";
-import { AuthenticatedRequest } from "../middleware/authenticateToken";
-
-dotenv.config();
 
 const generateToken = (user: any): string => {
   return jwt.sign(
@@ -18,102 +13,87 @@ const generateToken = (user: any): string => {
   );
 };
 
-export const register: RequestHandler = async (req, res) => {
-  const { name, email, password, role, walletAddress } = req.body;
+export async function register(data: {
+  name: string;
+  email: string;
+  password: string;
+  role?: string;
+  walletAddress?: string;
+}) {
+  const { name, email, password, role, walletAddress } = data;
 
-  try {
-    let user = await User.findOne({ email });
-    if (user) {
-      res.status(400).json({ message: "User already exists" });
-      return;
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    user = new User({
-      name,
-      email,
-      password: hashedPassword,
-      role,
-      walletAddress,
-    });
-    await user.save();
-
-    const subject = "Welcome to StarkNet!";
-    const html = registrationEmailTemplate(name);
-    await sendEmail(email, subject, html);
-
-    res.status(201).json({
-      message: "User registered successfully",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        walletAddress: user.walletAddress,
-      },
-    });
-  } catch (err: any) {
-    res.status(500).json({ message: "Server error", error: err.message });
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    throw new Error("User already exists");
   }
-};
 
-export const login: RequestHandler = async (req, res) => {
-  const { email, password } = req.body;
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
 
-  try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      res.status(400).json({ message: "Invalid email or password" });
-      return;
-    }
+  const user = new User({
+    name,
+    email,
+    password: hashedPassword,
+    role,
+    walletAddress,
+  });
+  await user.save();
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      res.status(400).json({ message: "Invalid email or password" });
-      return;
-    }
+  const subject = "Welcome to StarkNet!";
+  const html = registrationEmailTemplate(name);
+  await sendEmail(email, subject, html);
 
-    const token = generateToken(user);
-    res.status(200).json({ message: "Login successful", user, token });
-  } catch (err: any) {
-    res.status(500).json({ message: "Server error", error: err.message });
+  return {
+    message: "User registered successfully",
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      walletAddress: user.walletAddress,
+    },
+  };
+}
+
+export async function login(data: { email: string; password: string }) {
+  const { email, password } = data;
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new Error("Invalid email or password");
   }
-};
 
-// Use for authenticated routes
-export const changePassword = async (
-  req: AuthenticatedRequest,
-  res: Response
-) => {
-  const { currentPassword, newPassword } = req.body;
-
-  try {
-    const user = await User.findById(req.user?.id);
-    if (!user) {
-      res.status(404).json({ message: "User not found" });
-      return;
-    }
-    const isMatch = await bcrypt.compare(currentPassword, user.password);
-    if (!isMatch) {
-      res.status(400).json({ message: "Incorrect current password" });
-      return;
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
-
-    user.password = hashedPassword;
-    await user.save();
-
-    res.status(200).json({ message: "Password changed successfully" });
-  } catch (err: any) {
-    res.status(500).json({ message: "Server error", error: err.message });
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    throw new Error("Invalid email or password");
   }
-};
 
-export const logout: RequestHandler = (req, res) => {
-  res.clearCookie("token");
-  res.status(200).json({ message: "Logged out successfully" });
-};
+  const token = generateToken(user);
+  return { message: "Login successful", user, token };
+}
+
+export async function changePassword(data: {
+  userId: string;
+  currentPassword: string;
+  newPassword: string;
+}) {
+  const { userId, currentPassword, newPassword } = data;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const isMatch = await bcrypt.compare(currentPassword, user.password);
+  if (!isMatch) {
+    throw new Error("Incorrect current password");
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+  user.password = hashedPassword;
+  await user.save();
+
+  return { message: "Password changed successfully" };
+}

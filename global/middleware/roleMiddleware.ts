@@ -8,13 +8,24 @@ export type RequestWithEventId = AuthenticatedRequest & {
   };
 };
 
-// Middleware to check if the user is a superadmin
-export const isSuperAdmin = (
+interface HasUser {
+  user: {
+    role?: string;
+    name?: string;
+  };
+}
+
+export const isSuperAdmin = (req: HasUser): boolean => {
+  return req.user?.role === "superadmin";
+};
+
+// Express middleware version
+export const isSuperAdminMiddleware = (
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
 ): void => {
-  if (req.user && (req.user as any).role === "superadmin") {
+  if (isSuperAdmin(req as HasUser)) {
     next();
   } else {
     res.status(403).json({ message: "Access denied. SuperAdmin only." });
