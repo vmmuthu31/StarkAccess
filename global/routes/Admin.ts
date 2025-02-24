@@ -1,5 +1,4 @@
 import express from "express";
-import { NextFunction, Response } from "express";
 import { authenticateToken } from "../middleware/authenticateToken";
 import { isSuperAdmin, isAdmin } from "../middleware/roleMiddleware";
 import {
@@ -9,7 +8,6 @@ import {
   promoteUser,
   demoteUser,
 } from "../controllers/adminController";
-import { AuthenticatedRequest } from "../middleware/authenticateToken";
 
 const router = express.Router();
 

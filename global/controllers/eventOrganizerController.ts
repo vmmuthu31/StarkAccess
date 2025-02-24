@@ -1,4 +1,4 @@
-import { Request, Response, RequestHandler } from "express";
+import { RequestHandler } from "express";
 import User from "../models/User";
 import { IUser } from "../models/User";
 import { RequestWithEventId } from "../middleware/roleMiddleware";

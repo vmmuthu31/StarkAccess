@@ -1,4 +1,4 @@
-import { Request, Response, RequestHandler } from "express";
+import { Response, RequestHandler } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";

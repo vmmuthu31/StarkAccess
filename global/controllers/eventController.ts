@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
 import Event from "../models/Event";
 import User from "../models/User";
 import { sendEmail, eventCreationEmailTemplate } from "../utils/Mailer";
 import axios from "axios";
 import { RequestHandler } from "express";
 import { AuthenticatedRequest } from "../middleware/authenticateToken";
+import AdminAction from "../models/AdminAction";
 
 type AuthRequestHandler = RequestHandler<
   any,
@@ -93,21 +93,18 @@ export const deleteEvent: AuthRequestHandler = async (req, res) => {
       res.status(404).json({ message: "Event not found" });
       return;
     }
+
     await event.deleteOne();
 
-    const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(" ")[1];
-
-    const adminAction = {
+    const adminAction = new AdminAction({
+      admin: (req as any).user.id,
       action: "Deleted Event",
       targetId: event._id,
       targetType: "event",
       description: `Event "${event.name}" was deleted by admin.`,
-    };
-
-    await axios.post(`/api/admin/action`, adminAction, {
-      headers: { Authorization: `Bearer ${token}` },
+      performedAt: new Date(),
     });
+    await adminAction.save();
 
     res.status(200).json({ message: "Event deleted successfully" });
   } catch (err: any) {

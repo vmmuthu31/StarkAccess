@@ -1,4 +1,4 @@
-import { Request, Response, RequestHandler } from "express";
+import { Response, RequestHandler } from "express";
 import { AuthenticatedRequest } from "../middleware/authenticateToken";
 import AdminAction from "../models/AdminAction";
 import User from "../models/User";

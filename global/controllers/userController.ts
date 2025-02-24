@@ -1,4 +1,4 @@
-import { Request, Response, RequestHandler } from "express";
+import { RequestHandler } from "express";
 import axios from "axios";
 import User from "../models/User";
 import AdminAction from "../models/AdminAction";
