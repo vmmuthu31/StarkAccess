@@ -1,4 +1,40 @@
-function registrationEmailTemplate(name) {
+import nodemailer from "nodemailer";
+
+// Create transporter object for nodemailer with Gmail configuration
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+// Define the function to send an email
+export async function sendEmail(
+  to: string,
+  subject: string,
+  html: string,
+  cc?: string
+): Promise<void> {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to,
+    cc,
+    subject,
+    html,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error("Failed to send email", error);
+  }
+}
+
+// Template for the registration email
+export function registrationEmailTemplate(name: string): string {
   return `
     <h2>Welcome to StarkNet!</h2>
     <p>Hello ${name},</p>
@@ -11,7 +47,11 @@ function registrationEmailTemplate(name) {
   `;
 }
 
-function eventCreationEmailTemplate(name, eventName) {
+// Template for the event creation email
+export function eventCreationEmailTemplate(
+  name: string,
+  eventName: string
+): string {
   return `
     <h2>Your Event Has Been Created!</h2>
     <p>Hello ${name},</p>
@@ -23,8 +63,3 @@ function eventCreationEmailTemplate(name, eventName) {
     <p>If you have any questions or need help, contact us at starknethhofficial@gmail.com</p>
   `;
 }
-
-module.exports = {
-  registrationEmailTemplate,
-  eventCreationEmailTemplate,
-};
