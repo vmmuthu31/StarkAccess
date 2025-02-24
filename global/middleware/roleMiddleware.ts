@@ -1,6 +1,6 @@
-import { Response, NextFunction } from "express";
-import { AuthenticatedRequest, CustomJwtPayload } from "./authenticateToken";
+import { AuthenticatedRequest } from "./authenticateToken";
 import Event, { IEvent } from "../models/Event";
+import { NextResponse } from "next/server";
 
 export type RequestWithEventId = AuthenticatedRequest & {
   params: {
@@ -19,58 +19,31 @@ export const isSuperAdmin = (req: HasUser): boolean => {
   return req.user?.role === "superadmin";
 };
 
-// Express middleware version
-export const isSuperAdminMiddleware = (
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-): void => {
-  if (isSuperAdmin(req as HasUser)) {
-    next();
-  } else {
-    res.status(403).json({ message: "Access denied. SuperAdmin only." });
-  }
-};
-
 export const isAdmin = (user: { role?: string }): boolean => {
   return user?.role === "admin" || user?.role === "superadmin";
 };
 
-// Express middleware version
-export const isAdminMiddleware = (
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-): void => {
-  if (isAdmin(req.user as CustomJwtPayload)) {
-    next();
-  } else {
-    res.status(403).json({ message: "Access denied. Admin only." });
-  }
-};
-
 export const isOrganizer = async (
-  req: RequestWithEventId,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+  req: RequestWithEventId
+): Promise<NextResponse> => {
   const event = await Event.findById(req.params.eventId);
   if (!event) {
-    res.status(404).json({ message: "Event not found" });
-    return;
+    return NextResponse.json({ message: "Event not found" }, { status: 404 });
   }
 
   if (event.organizer.toString() !== (req as any).user.id) {
-    res.status(403).json({
-      message:
-        "Access denied. Only the organizer can add/remove co-organizers.",
-    });
-    return;
+    return NextResponse.json(
+      {
+        message:
+          "Access denied. Only the organizer can add/remove co-organizers.",
+      },
+      { status: 403 }
+    );
   }
 
   // Attach the event to the request object for later use
   (req as any).event = event;
-  next();
+  return NextResponse.json({ message: "Authorized", event });
 };
 
 export async function checkEventOrganizer(

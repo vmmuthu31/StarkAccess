@@ -1,17 +1,6 @@
-import { Response, RequestHandler } from "express";
-import { AuthenticatedRequest } from "../middleware/authenticateToken";
 import AdminAction from "../models/AdminAction";
 import User from "../models/User";
 
-type AuthenticatedRequestHandler = RequestHandler<
-  any,
-  any,
-  any,
-  any,
-  AuthenticatedRequest
->;
-
-// Add new function for Next.js routes
 export async function createAdminAction(data: {
   userId: string;
   action: string;
@@ -30,12 +19,10 @@ export async function createAdminAction(data: {
   return await adminAction.save();
 }
 
-// Add new function for Next.js routes
 export async function getAdminActionsData() {
   return await AdminAction.find().populate("admin", "name email");
 }
 
-// Controller to log an admin action
 export const createAdminActionHandler = async (data: {
   action: string;
   targetId: string;

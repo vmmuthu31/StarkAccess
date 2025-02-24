@@ -1,4 +1,3 @@
-import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { JwtPayload } from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
@@ -9,7 +8,7 @@ export interface CustomJwtPayload extends JwtPayload {
   name: string;
 }
 
-export interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest extends NextRequest {
   user?: CustomJwtPayload;
 }
 
