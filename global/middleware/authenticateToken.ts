@@ -66,3 +66,9 @@ export async function authenticateNextRequest(req: NextRequest) {
     return null;
   }
 }
+
+export function isAuthResponse(
+  response: AuthResponse | NextResponse
+): response is AuthResponse {
+  return "user" in response;
+}

@@ -1,24 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
-import { changePassword } from "@/global/controllers/authController";
+import { getMyEvents } from "@/global/controllers/eventController";
 import {
   authenticateToken,
   isAuthResponse,
 } from "@/global/middleware/authenticateToken";
 
-export async function PUT(req: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
     const authReq = await authenticateToken(req);
     if (!isAuthResponse(authReq)) {
-      return authReq; // Returns NextResponse with error
+      return authReq;
     }
 
-    const body = await req.json();
-    const result = await changePassword({
-      userId: authReq.user.id,
-      ...body,
+    const events = await getMyEvents(authReq.user.id);
+    return NextResponse.json({
+      message: "Events retrieved successfully",
+      events,
     });
-
-    return NextResponse.json(result);
   } catch (error: any) {
     return NextResponse.json(
       { message: "Server error", error: error.message },
