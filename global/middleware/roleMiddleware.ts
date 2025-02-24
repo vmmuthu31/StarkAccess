@@ -1,5 +1,5 @@
 import { Response, NextFunction } from "express";
-import { AuthenticatedRequest } from "./authenticateToken";
+import { AuthenticatedRequest, CustomJwtPayload } from "./authenticateToken";
 import Event, { IEvent } from "../models/Event";
 
 export type RequestWithEventId = AuthenticatedRequest & {
@@ -32,17 +32,17 @@ export const isSuperAdminMiddleware = (
   }
 };
 
-// Middleware to check if the user is an admin or superadmin
-export const isAdmin = (
+export const isAdmin = (user: { role?: string }): boolean => {
+  return user?.role === "admin" || user?.role === "superadmin";
+};
+
+// Express middleware version
+export const isAdminMiddleware = (
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
 ): void => {
-  if (
-    req.user &&
-    ((req.user as any).role === "admin" ||
-      (req.user as any).role === "superadmin")
-  ) {
+  if (isAdmin(req.user as CustomJwtPayload)) {
     next();
   } else {
     res.status(403).json({ message: "Access denied. Admin only." });

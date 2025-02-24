@@ -1,186 +1,151 @@
-import { RequestHandler } from "express";
-import User from "../models/User";
-import AdminAction from "../models/AdminAction";
+import User from "@/global/models/User";
+import AdminAction from "@/global/models/AdminAction";
+import { CustomError } from "@/global/utils/errors";
 
-type AuthRequestHandler = RequestHandler<
-  any,
-  any,
-  any,
-  any,
-  Record<string, any>
->;
-
-// Get all users (excluding password)
-export const getAllUsers: AuthRequestHandler = async (req, res) => {
-  try {
-    const users = await User.find().select("-password");
-    if (!users || users.length === 0) {
-      res.status(404).json({ message: "No users found" });
-      return;
-    }
-    res.status(200).json({ users });
-  } catch (err: any) {
-    res.status(500).json({ message: "Server error", error: err.message });
+export async function getAllUsers() {
+  const users = await User.find().select("-password");
+  if (!users || users.length === 0) {
+    throw new CustomError("No users found", 404);
   }
-};
+  return users;
+}
 
-// Get a specific user by ID (excluding password)
-export const getUserById: AuthRequestHandler = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id).select("-password");
-    if (!user) {
-      res.status(404).json({ message: "User not found" });
-      return;
-    }
-    res.status(200).json({ user });
-  } catch (err: any) {
-    res.status(500).json({ message: "Server error", error: err.message });
+export async function getUserById(id: string) {
+  const user = await User.findById(id).select("-password");
+  if (!user) {
+    throw new CustomError("User not found", 404);
   }
-};
+  return user;
+}
 
-// Delete a user by ID and log the action
-export const deleteUser: AuthRequestHandler = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    if (!user) {
-      res.status(404).json({ message: "User not found" });
-      return;
-    }
-    await user.deleteOne();
+export async function deleteUser(data: { userId: string; adminId: string }) {
+  const { userId, adminId } = data;
 
-    // Create and save admin action directly
-    const adminAction = new AdminAction({
-      admin: (req as any).user.id,
-      action: "Deleted User",
-      targetId: user._id,
-      targetType: "user",
-      description: `User "${user.name}" was deleted by admin.`,
-      performedAt: new Date(),
-    });
-    await adminAction.save();
-
-    res.status(200).json({ message: "User deleted successfully" });
-  } catch (err: any) {
-    res.status(500).json({ message: "Server error", error: err.message });
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new CustomError("User not found", 404);
   }
-};
 
-// Suspend a user for a given duration (in days)
-export const suspendUser: AuthRequestHandler = async (req, res) => {
-  const { suspensionDuration, email } = req.body;
-  try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      res.status(404).json({ message: "User not found" });
-      return;
-    }
-    if (user.isBanned) {
-      res.status(400).json({
-        message: "User is banned and cannot be suspended",
-      });
-      return;
-    }
+  await user.deleteOne();
 
-    const suspensionEndDate = new Date();
-    suspensionEndDate.setDate(suspensionEndDate.getDate() + suspensionDuration);
+  const adminAction = new AdminAction({
+    admin: adminId,
+    action: "Deleted User",
+    targetId: user._id,
+    targetType: "user",
+    description: `User "${user.name}" was deleted by admin.`,
+    performedAt: new Date(),
+  });
+  await adminAction.save();
 
-    user.isSuspended = true;
-    user.suspensionEndDate = suspensionEndDate;
-    await user.save();
+  return { message: "User deleted successfully" };
+}
 
-    const adminAction = new AdminAction({
-      admin: (req as any).user.id,
-      action: "Suspended User",
-      targetId: user._id,
-      targetType: "user",
-      description: `User "${user.name}" was suspended for ${suspensionDuration} days by admin.`,
-      performedAt: new Date(),
-    });
-    await adminAction.save();
+export async function suspendUser(data: {
+  email: string;
+  suspensionDuration: number;
+  adminId: string;
+}) {
+  const { email, suspensionDuration, adminId } = data;
 
-    res.status(200).json({
-      message: `User "${user.name}" has been suspended for ${suspensionDuration} days`,
-      user,
-    });
-  } catch (err: any) {
-    res.status(500).json({ message: "Server error", error: err.message });
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new CustomError("User not found", 404);
   }
-};
 
-// Ban a user permanently
-export const banUser: AuthRequestHandler = async (req, res) => {
-  const { email } = req.body;
-  try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      res.status(404).json({ message: "User not found" });
-      return;
-    }
-
-    user.isBanned = true;
-    user.isSuspended = false; // Clear any active suspension
-    user.suspensionEndDate = null;
-    await user.save();
-
-    const adminAction = new AdminAction({
-      admin: (req as any).user.id,
-      action: "Banned User",
-      targetId: user._id,
-      targetType: "user",
-      description: `User "${user.name}" was permanently banned by admin "${
-        (req as any).user.name
-      }".`,
-      performedAt: new Date(),
-    });
-    await adminAction.save();
-
-    res.status(200).json({
-      message: `User "${user.name}" has been permanently banned`,
-      user,
-    });
-  } catch (err: any) {
-    res.status(500).json({ message: "Server error", error: err.message });
+  if (user.isBanned) {
+    throw new CustomError("User is banned and cannot be suspended", 400);
   }
-};
 
-// Revive a user (remove suspension or ban)
-export const reviveUser: AuthRequestHandler = async (req, res) => {
-  const { email } = req.body;
-  try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      res.status(404).json({ message: "User not found" });
-      return;
-    }
-    if (!user.isSuspended && !user.isBanned) {
-      res.status(400).json({ message: "User is not suspended or banned" });
-      return;
-    }
+  const suspensionEndDate = new Date();
+  suspensionEndDate.setDate(suspensionEndDate.getDate() + suspensionDuration);
 
-    user.isSuspended = false;
-    user.suspensionEndDate = null;
-    user.isBanned = false;
-    await user.save();
+  user.isSuspended = true;
+  user.suspensionEndDate = suspensionEndDate;
+  await user.save();
 
-    const adminAction = new AdminAction({
-      admin: (req as any).user.id,
-      action: "Revived User",
-      targetId: user._id,
-      targetType: "user",
-      description: `User "${
-        user.name
-      }" was revived (suspension or ban removed) by admin "${
-        (req as any).user.name
-      }".`,
-      performedAt: new Date(),
-    });
-    await adminAction.save();
+  const adminAction = new AdminAction({
+    admin: adminId,
+    action: "Suspended User",
+    targetId: user._id,
+    targetType: "user",
+    description: `User "${user.name}" was suspended for ${suspensionDuration} days by admin.`,
+    performedAt: new Date(),
+  });
+  await adminAction.save();
 
-    res.status(200).json({
-      message: `User "${user.name}" has been revived (suspension/ban removed)`,
-      user,
-    });
-  } catch (err: any) {
-    res.status(500).json({ message: "Server error", error: err.message });
+  return {
+    message: `User "${user.name}" has been suspended for ${suspensionDuration} days`,
+    user,
+  };
+}
+
+export async function banUser(data: {
+  email: string;
+  adminId: string;
+  adminName: string;
+}) {
+  const { email, adminId, adminName } = data;
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new CustomError("User not found", 404);
   }
-};
+
+  user.isBanned = true;
+  user.isSuspended = false;
+  user.suspensionEndDate = null;
+  await user.save();
+
+  const adminAction = new AdminAction({
+    admin: adminId,
+    action: "Banned User",
+    targetId: user._id,
+    targetType: "user",
+    description: `User "${user.name}" was permanently banned by admin "${adminName}".`,
+    performedAt: new Date(),
+  });
+  await adminAction.save();
+
+  return {
+    message: `User "${user.name}" has been permanently banned`,
+    user,
+  };
+}
+
+export async function reviveUser(data: {
+  email: string;
+  adminId: string;
+  adminName: string;
+}) {
+  const { email, adminId, adminName } = data;
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new CustomError("User not found", 404);
+  }
+
+  if (!user.isSuspended && !user.isBanned) {
+    throw new CustomError("User is not suspended or banned", 400);
+  }
+
+  user.isSuspended = false;
+  user.suspensionEndDate = null;
+  user.isBanned = false;
+  await user.save();
+
+  const adminAction = new AdminAction({
+    admin: adminId,
+    action: "Revived User",
+    targetId: user._id,
+    targetType: "user",
+    description: `User "${user.name}" was revived (suspension or ban removed) by admin "${adminName}".`,
+    performedAt: new Date(),
+  });
+  await adminAction.save();
+
+  return {
+    message: `User "${user.name}" has been revived (suspension/ban removed)`,
+    user,
+  };
+}
