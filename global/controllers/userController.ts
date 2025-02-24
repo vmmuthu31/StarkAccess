@@ -1,6 +1,6 @@
-import User from "@/global/models/User";
-import AdminAction from "@/global/models/AdminAction";
-import { CustomError } from "@/global/utils/errors";
+import User from "@global/models/User";
+import AdminAction from "@global/models/AdminAction";
+import { CustomError } from "@global/utils/errors";
 
 export async function getAllUsers() {
   const users = await User.find().select("-password");

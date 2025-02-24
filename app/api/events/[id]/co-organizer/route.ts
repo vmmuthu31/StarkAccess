@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   addCoOrganizer,
   removeCoOrganizer,
-} from "@/global/controllers/eventOrganizerController";
+} from "@global/controllers/eventOrganizerController";
 import {
   authenticateToken,
   isAuthResponse,
-} from "@/global/middleware/authenticateToken";
-import { checkEventOrganizer } from "@/global/middleware/roleMiddleware";
+} from "@global/middleware/authenticateToken";
+import { checkEventOrganizer } from "@global/middleware/roleMiddleware";
 
 export async function POST(
   req: NextRequest,

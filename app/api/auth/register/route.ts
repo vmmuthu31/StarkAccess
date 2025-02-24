@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { register } from "@/global/controllers/authController";
+import { register } from "@global/controllers/authController";
 
 export async function POST(req: NextRequest) {
   try {

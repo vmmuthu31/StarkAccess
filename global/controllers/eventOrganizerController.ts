@@ -1,5 +1,5 @@
-import { IEvent } from "@/global/models/Event";
-import User from "@/global/models/User";
+import { IEvent } from "@global/models/Event";
+import User from "@global/models/User";
 
 export async function addCoOrganizer(data: {
   eventId: string;

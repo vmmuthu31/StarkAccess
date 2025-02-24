@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUserById, deleteUser } from "@/global/controllers/userController";
+import { getUserById, deleteUser } from "@global/controllers/userController";
 import {
   authenticateToken,
   isAuthResponse,
-} from "@/global/middleware/authenticateToken";
-import { isAdmin } from "@/global/middleware/roleMiddleware";
+} from "@global/middleware/authenticateToken";
+import { isAdmin } from "@global/middleware/roleMiddleware";
 
 export async function GET(
   req: NextRequest,

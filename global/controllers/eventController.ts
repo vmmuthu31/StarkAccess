@@ -1,7 +1,7 @@
-import Event from "@/global/models/Event";
-import User from "@/global/models/User";
-import AdminAction from "@/global/models/AdminAction";
-import { sendEmail, eventCreationEmailTemplate } from "@/global/utils/Mailer";
+import Event from "@global/models/Event";
+import User from "@global/models/User";
+import AdminAction from "@global/models/AdminAction";
+import { sendEmail, eventCreationEmailTemplate } from "@global/utils/Mailer";
 
 export async function createEvent(data: {
   name: string;

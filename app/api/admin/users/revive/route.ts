@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { reviveUser } from "@/global/controllers/userController";
+import { reviveUser } from "@global/controllers/userController";
 import {
   authenticateToken,
   isAuthResponse,
-} from "@/global/middleware/authenticateToken";
-import { isAdmin } from "@/global/middleware/roleMiddleware";
+} from "@global/middleware/authenticateToken";
+import { isAdmin } from "@global/middleware/roleMiddleware";
 
 export async function POST(req: NextRequest) {
   try {

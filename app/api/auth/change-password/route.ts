@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { changePassword } from "@/global/controllers/authController";
+import { changePassword } from "@global/controllers/authController";
 import {
   authenticateToken,
   isAuthResponse,
-} from "@/global/middleware/authenticateToken";
+} from "@global/middleware/authenticateToken";
 
 export async function PUT(req: NextRequest) {
   try {

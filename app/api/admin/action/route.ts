@@ -3,9 +3,9 @@ import {
   createAdminAction,
   getAdminActions,
   getAdminActionsData,
-} from "@/global/controllers/adminController";
-import { authenticateNextRequest } from "@/global/middleware/authenticateToken";
-import { isSuperAdmin } from "@/global/middleware/roleMiddleware";
+} from "@global/controllers/adminController";
+import { authenticateNextRequest } from "@global/middleware/authenticateToken";
+import { isSuperAdmin } from "@global/middleware/roleMiddleware";
 
 export async function POST(req: NextRequest) {
   try {

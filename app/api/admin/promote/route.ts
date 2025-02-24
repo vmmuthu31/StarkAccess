@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promoteUser } from "@/global/controllers/adminController";
-import { authenticateNextRequest } from "@/global/middleware/authenticateToken";
-import { isSuperAdmin } from "@/global/middleware/roleMiddleware";
+import { promoteUser } from "@global/controllers/adminController";
+import { authenticateNextRequest } from "@global/middleware/authenticateToken";
+import { isSuperAdmin } from "@global/middleware/roleMiddleware";
 
 export async function PUT(req: NextRequest) {
   try {

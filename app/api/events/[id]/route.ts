@@ -3,11 +3,11 @@ import {
   getEventById,
   updateEvent,
   deleteEvent,
-} from "@/global/controllers/eventController";
+} from "@global/controllers/eventController";
 import {
   authenticateToken,
   isAuthResponse,
-} from "@/global/middleware/authenticateToken";
+} from "@global/middleware/authenticateToken";
 
 export async function GET(
   req: NextRequest,

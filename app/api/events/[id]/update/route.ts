@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updateEvent } from "@/global/controllers/eventOrganizerController";
+import { updateEvent } from "@global/controllers/eventOrganizerController";
 import {
   authenticateToken,
   isAuthResponse,
-} from "@/global/middleware/authenticateToken";
-import { checkEventOrganizerOrCoOrganizer } from "@/global/middleware/roleMiddleware";
+} from "@global/middleware/authenticateToken";
+import { checkEventOrganizerOrCoOrganizer } from "@global/middleware/roleMiddleware";
 
 export async function PUT(
   req: NextRequest,

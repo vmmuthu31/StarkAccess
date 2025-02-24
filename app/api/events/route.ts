@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  createEvent,
-  getAllEvents,
-} from "@/global/controllers/eventController";
+import { createEvent, getAllEvents } from "@global/controllers/eventController";
 import {
   authenticateToken,
   isAuthResponse,
-} from "@/global/middleware/authenticateToken";
+} from "@global/middleware/authenticateToken";
 
 export async function POST(req: NextRequest) {
   try {
