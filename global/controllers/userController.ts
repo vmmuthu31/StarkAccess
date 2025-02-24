@@ -1,15 +1,13 @@
 import { RequestHandler } from "express";
-import axios from "axios";
 import User from "../models/User";
 import AdminAction from "../models/AdminAction";
-import { AuthenticatedRequest } from "../middleware/authenticateToken";
 
 type AuthRequestHandler = RequestHandler<
   any,
   any,
   any,
   any,
-  AuthenticatedRequest
+  Record<string, any>
 >;
 
 // Get all users (excluding password)
@@ -50,20 +48,16 @@ export const deleteUser: AuthRequestHandler = async (req, res) => {
     }
     await user.deleteOne();
 
-    // Prepare the admin action log
-    const adminAction = {
+    // Create and save admin action directly
+    const adminAction = new AdminAction({
+      admin: (req as any).user.id,
       action: "Deleted User",
       targetId: user._id,
       targetType: "user",
       description: `User "${user.name}" was deleted by admin.`,
-    };
-
-    // Send admin action log via axios POST request
-    const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(" ")[1];
-    await axios.post(`/api/admin/action`, adminAction, {
-      headers: { Authorization: `Bearer ${token}` },
+      performedAt: new Date(),
     });
+    await adminAction.save();
 
     res.status(200).json({ message: "User deleted successfully" });
   } catch (err: any) {
@@ -81,9 +75,9 @@ export const suspendUser: AuthRequestHandler = async (req, res) => {
       return;
     }
     if (user.isBanned) {
-      res
-        .status(400)
-        .json({ message: "User is banned and cannot be suspended" });
+      res.status(400).json({
+        message: "User is banned and cannot be suspended",
+      });
       return;
     }
 
