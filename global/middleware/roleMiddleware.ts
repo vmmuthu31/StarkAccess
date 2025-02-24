@@ -1,6 +1,6 @@
 import { Response, NextFunction } from "express";
 import { AuthenticatedRequest } from "./authenticateToken";
-import Event from "../models/Event";
+import Event, { IEvent } from "../models/Event";
 
 export type RequestWithEventId = AuthenticatedRequest & {
   params: {
@@ -73,30 +73,30 @@ export const isOrganizer = async (
   next();
 };
 
-// Middleware to check if the current user is an organizer or a co-organizer of the event
-export const isOrganizerOrCoOrganizer = async (
-  req: RequestWithEventId,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  const event = await Event.findById(req.params.eventId);
-  if (!event) {
-    res.status(404).json({ message: "Event not found" });
-    return;
+export async function checkEventOrganizer(
+  eventId: string,
+  userId: string
+): Promise<IEvent | null> {
+  const event = await Event.findById(eventId);
+  if (!event) return null;
+
+  if (event.organizer.toString() !== userId) {
+    return null;
   }
 
-  // Assume that the Event model has instance methods isOrganizer and isCoOrganizer.
-  if (
-    !event.isOrganizer((req as any).user.id) &&
-    !event.isCoOrganizer((req as any).user.id)
-  ) {
-    res.status(403).json({
-      message:
-        "Access denied. Only organizers or co-organizers can update event details.",
-    });
-    return;
+  return event;
+}
+
+export async function checkEventOrganizerOrCoOrganizer(
+  eventId: string,
+  userId: string
+): Promise<IEvent | null> {
+  const event = await Event.findById(eventId);
+  if (!event) return null;
+
+  if (!event.isOrganizer(userId) && !event.isCoOrganizer(userId)) {
+    return null;
   }
 
-  (req as any).event = event;
-  next();
-};
+  return event;
+}
